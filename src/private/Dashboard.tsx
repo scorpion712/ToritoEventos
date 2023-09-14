@@ -1,4 +1,4 @@
-import { Box, Container } from '@mui/material'
+import { Box } from '@mui/material'
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -36,6 +36,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 import MenuAppBar from '../public/components/MenuAppBar'
 import MenuDrawer from '../public/components/MenuDrawer';
+import { EventCalendar } from '../public/components/Calendar';
 
 export default function Dashboard() {
     const [open, setOpen] = React.useState(false);
@@ -58,11 +59,10 @@ export default function Dashboard() {
                     openDrawer={open} />
                 <Main open={open}>
                     <DrawerHeader />
-                    <Container>
-                        <Typography paragraph>
-                            aca va el calendario {open ? 'si' : 'no'}
-                        </Typography>
-                    </Container>
+                    <Typography variant='h4'>
+                        Eventos
+                    </Typography>
+                    <EventCalendar />
                 </Main>
             </Box>
         </Box>
