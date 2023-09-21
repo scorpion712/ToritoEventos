@@ -1,10 +1,8 @@
 import * as React from 'react';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/FormControl';
-import { styled } from '@mui/material/styles';
+import Paper from '@mui/material/Paper'; 
 import { ViewState, EditingState, IntegratedEditing } from '@devexpress/dx-react-scheduler';
 import {
-    Scheduler, 
+    Scheduler,
     MonthView,
     Toolbar,
     DateNavigator,
@@ -12,46 +10,21 @@ import {
     TodayButton,
     AppointmentForm,
     AppointmentTooltip,
-    DragDropProvider, 
+    DragDropProvider,
     ChangeSet,
     CurrentTimeIndicator
 } from '@devexpress/dx-react-scheduler-material-ui';
-import IconButton from '@mui/material/IconButton';
-import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
-import { Box, Grid, Menu, MenuItem } from '@mui/material';
-import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import { BasicLayout } from './calendar/CalendarEventForm';
+import { AppointmentCard } from './calendar/AppointmentCard';
+import { AppointmentCardHeader } from './calendar/AppointmentCardHeader';
 
-const TextEditor = (props: any) => {
-    // eslint-disable-next-line react/destructuring-assignment
-    if (props.type === 'multilineTextEditor') {
-        return null;
-    } return <AppointmentForm.TextEditor {...props} />;
-};
-
-const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: any) => {
-    const onCustomFieldChange = (nextValue: any) => {
-        onFieldChange({ customField: nextValue });
-    };
-
-    return (
-        <AppointmentForm.BasicLayout
-            appointmentData={appointmentData}
-            onFieldChange={onFieldChange}
-            {...restProps}
-        >
-            <AppointmentForm.Label
-                text="Custom Field"
-                type="title"
-            />
-            <AppointmentForm.TextEditor
-                value={appointmentData.customField}
-                onValueChange={onCustomFieldChange}
-                placeholder="Custom field"
-            />
-        </AppointmentForm.BasicLayout>
-    );
-};
+interface AppointmentOwner {
+    id: string;
+    name: string;
+    surname: string;
+    phone: string;
+    email: string;
+}
 
 const appointments = [
     {
@@ -62,7 +35,13 @@ const appointments = [
         guests: '100',
         img: 'https://images.pexels.com/photos/2747449/pexels-photo-2747449.jpeg?cs=srgb&dl=pexels-wolfgang-2747449.jpg&fm=jpg',
         owners: [
-            "Francisco Fernandez"
+            {
+                id: Math.random().toString(16).slice(2),
+                name: "Francisco",
+                surname: "Fernandez",
+                phone: "223456789",
+                email: "franfernandez@gmail.com"
+            } as AppointmentOwner
         ],
         eventType: "Meet"
     }, {
@@ -73,7 +52,13 @@ const appointments = [
         guests: '20',
         img: '',
         owners: [
-            "Federico Gomez"
+            {
+                id: Math.random().toString(16).slice(2),
+                name: "Federico",
+                surname: "Gomez",
+                phone: "2239876543",
+                email: "fedegomez@gmail.com"
+            } as AppointmentOwner
         ],
         eventType: "Birthday"
     }, {
@@ -84,8 +69,20 @@ const appointments = [
         guests: '34',
         img: 'https://js.devexpress.com/Demos/DXHotels/Content/Pictures/MeetingRoom-0.jpg',
         owners: [
-            "Francisco Fernandez",
-            "Federico Gomez"
+            {
+                id: Math.random().toString(16).slice(2),
+                name: "Francisco",
+                surname: "Fernandez",
+                phone: "223456789",
+                email: "franfernandez@gmail.com"
+            } as AppointmentOwner,
+            {
+                id: Math.random().toString(16).slice(2),
+                name: "Federico",
+                surname: "Gomez",
+                phone: "2239876543",
+                email: "fedegomez@gmail.com"
+            } as AppointmentOwner
         ],
         eventType: "Birthday"
     }, {
@@ -96,7 +93,13 @@ const appointments = [
         guests: '30',
         img: 'https://js.devexpress.com/Demos/DXHotels/Content/Pictures/MeetingRoom-4.jpg',
         owners: [
-            "Federico Franco Fernandez"
+            {
+                id: Math.random().toString(16).slice(2),
+                name: "Francisco",
+                surname: "Fernandez",
+                phone: "223456789",
+                email: "franfernandez@gmail.com"
+            } as AppointmentOwner,
         ],
         eventType: "Private"
     }
@@ -112,7 +115,7 @@ const classes = {
     thirdRoom: `${PREFIX}-thirdRoom`,
     header: `${PREFIX}-header`,
     commandButton: `${PREFIX}-commandButton`,
-}; 
+};
 
 const getClassByLocation = (location: string) => {
     if (location === 'Room 1') return classes.firstRoom;
@@ -129,61 +132,7 @@ const getEventColorByType = (eventType: string) => {
         default:
             return "#6F1E4F";
     }
-}
-
-const StyledIconButton = styled(IconButton)(() => ({
-    [`&.${classes.commandButton}`]: {
-        backgroundColor: 'rgba(255,255,255,0.65)',
-    },
-}));
-
-const AppointmentTooltipHeader = (({
-    children, appointmentData, ...restProps
-}: AppointmentTooltip.HeaderProps) => ( 
-    <Box>
-        <AppointmentTooltip.Header
-            {...restProps} 
-            appointmentData={appointmentData}
-        >
-
-            <StyledIconButton
-                /* eslint-disable-next-line no-alert */
-                onClick={() => alert("Confirmar evento: Proximamente")}
-                size="large"
-            >
-                <AssignmentTurnedInIcon color='success' />
-            </StyledIconButton>
-        </AppointmentTooltip.Header>
-        <img src={`${appointmentData.img}`} height={260} width={'100%'} alt=" " />
-    </Box>
-));
-
-const AppointmentTooltipContent = (({
-    children, appointmentData, ...restProps
-}: AppointmentTooltip.ContentProps) => (
-    <Grid container alignItems="center">
-        <Grid item xs={12} style={{ marginLeft: '25px' }}>
-            <Typography component='h2' style={{ fontWeight: '700', color: "#4E4E4E" }}>{appointmentData.title}</Typography>
-        </Grid>
-        <Grid item xs={12} style={{ marginLeft: '25px', marginBottom: '15px' }}>
-            <span style={{textDecoration:'underline', fontWeight: '600', color: "#4E4E4E"}}>{`${appointmentData.owners.length == 1 ? "Organizador" : "Organizadores"}:`}</span>
-            <Typography>{appointmentData.owners.join('; ')}</Typography>
-        </Grid>
-        <Grid item xs={2} style={{textAlign: 'center'}} >
-            <AccessTimeIcon color='info' />
-        </Grid>
-        <Grid item xs={10} style={{ fontWeight: '400', color: '#000026' }}>
-            {`${appointmentData.startDate.toLocaleString()} - ${appointmentData.startDate.toLocaleString('es-ES').substring(appointmentData.startDate.toLocaleString('es-ES').indexOf(',')+1)}`}
-        </Grid>
-        <Grid item xs={2} style={{textAlign: 'center'}} >
-            <EmojiPeopleIcon color='secondary' />
-        </Grid>
-        <Grid item xs={10} style={{ fontWeight: '400', color: '#000026' }}>
-            {`${appointmentData.guests} invitados`}
-        </Grid>
-    </Grid>
-));
-
+} 
 
 const Appointment = ({
     children, style, ...restProps
@@ -219,12 +168,22 @@ export const EventCalendar = () => {
 
     const onCommitChanges = React.useCallback(({ added, changed, deleted }: ChangeSet) => {
         if (added) {
-            console.log("Agregando: Validar que los campos sean validos")
+            console.log("Agregando: Validar que los campos sean validos - en caso de que no mostar snackbar", added)
+            added.title = `${added.eventType} ${added.guests} invidados`;
+
+            // validar que tenga un organizador con los datos completos
+            // validar que coincidan las fechas (inicio > fin y hora inicio > hora fin)
+            // validar fecha inicio >= hoy
+            // validar que tenga al menos 1 invitado
+            // si no tiene foto, por defecto la de torito
+
+            // si no cumple mostrar un 
+
             const startingAddedId = data.length > 0 ? data[data.length - 1].id + 1 : 0;
-            setData([...data, { id: startingAddedId, ...added }]);
+            setData([...data, { id: startingAddedId, ...added }]); 
         }
         if (changed) {
-            console.log("Modificando: Validar que los campos sean validos")
+            console.log("Modificando: Validar que los campos sean validos - en caso de que no mostar snackbar", data)
             setData(data.map(appointment => (
                 changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment)));
         }
@@ -239,7 +198,7 @@ export const EventCalendar = () => {
         setIsAppointmentBeingCreated(true);
     }, [addedAppointment]);
 
-    const CommandButton = React.useCallback(({ id, ...restProps }: AppointmentForm.CommandButtonProps) => { 
+    const CommandButton = React.useCallback(({ id, ...restProps }: AppointmentForm.CommandButtonProps) => {
         if (id === 'deleteButton') {
             return <AppointmentForm.CommandButton id={id} {...restProps} disabled={!allowDeleting} />;
         }
@@ -255,7 +214,7 @@ export const EventCalendar = () => {
         <React.Fragment>
             <Paper>
                 <Scheduler data={data}
-                            locale={'es-ES'}>
+                    locale={'es-ES'}>
                     <ViewState defaultCurrentDate={new Date()} />
                     <EditingState
                         onCommitChanges={onCommitChanges}
@@ -275,15 +234,14 @@ export const EventCalendar = () => {
 
                     <AppointmentTooltip
                         showOpenButton
-                        headerComponent={AppointmentTooltipHeader}
-                        contentComponent={AppointmentTooltipContent}
+                        headerComponent={AppointmentCardHeader}
+                        contentComponent={AppointmentCard}
                         showDeleteButton={allowDeleting}
                     />
                     <AppointmentForm
                         commandButtonComponent={CommandButton}
                         readOnly={isAppointmentBeingCreated ? false : !allowUpdating}
                         basicLayoutComponent={BasicLayout}
-                        textEditorComponent={TextEditor}
                     />
                     <DragDropProvider allowDrag={allowDrag} />
 
@@ -297,7 +255,3 @@ export const EventCalendar = () => {
         </React.Fragment>
     );
 };
-
-
-
-// Controlled mode weeks vierw

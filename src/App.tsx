@@ -1,9 +1,9 @@
-import { ThemeProvider, createTheme } from '@mui/material/styles';  
+import { ThemeProvider, createTheme } from '@mui/material/styles'; 
+
 import Dashboard from './private/Dashboard';
 
-
 const theme = createTheme({
-  
+
   palette: {
     mode: 'light',
     primary: {
@@ -13,8 +13,8 @@ const theme = createTheme({
       main: '#d22e92',
     },
     background: {
-      default: '#bbb2bb',
-      paper: '#e6dde6',
+      default: '#E8E8E8',
+      paper: '#FAFAFA',
     },
     error: {
       main: '#f52c2c',
@@ -32,11 +32,11 @@ const theme = createTheme({
 });
 
 
-function App() { 
+function App() {
 
   return (
     <ThemeProvider theme={theme}>
-     <Dashboard />
+      <Dashboard />
     </ThemeProvider>
   )
 }
