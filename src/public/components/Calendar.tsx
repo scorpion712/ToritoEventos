@@ -22,6 +22,7 @@ import { EventModel } from '../models/EventModel';
 import { deleteEvent } from '../services/events/RemoveEventService';
 import { addEvent } from '../services/events/AddEventService';
 import { ErrorSnackbar } from './ErrorSnackbar';
+import { eventTypeReverseMap } from '../models/EventType';
 
 
 interface AppointmentOwner {
@@ -166,7 +167,7 @@ export const EventCalendar = () => {
 
     const onCommitChanges = React.useCallback(({ added, changed, deleted }: ChangeSet) => {
         if (added) {
-            added.title = `${added.eventType} ${added.guests} invitados`;
+            added.title = `${eventTypeReverseMap[added.eventType]} ${added.guests} invitados`;
 
             if (isFormValid(added)) {
                 const startingAddedId = data.length > 0 ? data[data.length - 1].id + 1 : 0;

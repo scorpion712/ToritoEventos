@@ -1,5 +1,5 @@
 
-import { DocumentData, DocumentReference, Timestamp, addDoc, doc, setDoc } from "firebase/firestore";
+import { Timestamp, addDoc, doc, setDoc } from "firebase/firestore";
 import { collection } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
