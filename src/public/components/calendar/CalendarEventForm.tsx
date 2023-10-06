@@ -1,4 +1,4 @@
-import Typography from '@mui/material/FormControl'; 
+import Typography from '@mui/material/FormControl';
 import { AppointmentForm } from '@devexpress/dx-react-scheduler-material-ui';
 import {
     Accordion,
@@ -17,7 +17,7 @@ import {
     MenuItem,
     Select,
     TextField,
-} from '@mui/material'; 
+} from '@mui/material';
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import PhoneIcon from '@mui/icons-material/Phone';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
@@ -25,7 +25,9 @@ import AddIcon from '@mui/icons-material/Add';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { AppointmentOwner } from '../../models/AppointmentModel';
- 
+
+import FileUpload from '../FileUploadButton';
+
 
 export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: AppointmentForm.BasicLayoutProps) => {
 
@@ -34,24 +36,23 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
     }
 
     const onStartDateChange = (value: string) => {
-        console.log("Verificar que la hora no sea mayor a la de fin")
         const date = appointmentData.startDate;
         date.setHours(value.substring(0, value.indexOf(':')), value.substring(value.indexOf(':') + 1))
         onFieldChange({ startDate: date })
     }
 
     const onEndDateChange = (value: string) => {
-        console.log("Verificar que la fecha no sea menor a la de inicio - tener en cuenta la hora de inicio")
-        console.log(value);
-        onFieldChange({ endDate: new Date(value) })
+        const endDate = new Date(value);
+        endDate.setTime(endDate.getTime() - 3 * 60 * 60 * 1000);
+        onFieldChange({ endDate: endDate })
     }
 
     const onGuestsChange = (value: string) => {
         onFieldChange({ guests: value })
     }
 
-    const onImageUpload = (value: string) => {
-        onFieldChange({ img: value });
+    const onImageUpload = (value: string, file: File) => {
+        onFieldChange({ img: value, imgFile: file });
     }
 
     const onDeleteOwner = () => {
@@ -81,6 +82,15 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
         onFieldChange({ owners: appointmentData.owners })
     }
 
+    const handleFileUpload = (file: File) => {
+        // read the image and set it on appointment
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            onImageUpload(e.target?.result as string, file);
+        };
+        reader.readAsDataURL(file);
+    };
+
     return (
         <Grid container style={{ marginRight: '10px', marginLeft: '0px', marginTop: '0' }} spacing={3}>
             <Grid item xs={12}>
@@ -94,10 +104,10 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
                         <MenuItem value="">
                             <em>Seleccionar tipo de evento</em>
                         </MenuItem>
-                        <MenuItem value={'Birthday'}>Cumpleanos</MenuItem>
-                        <MenuItem value={'Private'}>Privado</MenuItem>
-                        <MenuItem value={'Meet'}>Reunion</MenuItem>
-                        <MenuItem value={'Enterprise'}>Empresa</MenuItem>
+                        <MenuItem value={1}>Cumpleanos</MenuItem>
+                        <MenuItem value={2}>Privado</MenuItem>
+                        <MenuItem value={3}>Reunion</MenuItem>
+                        <MenuItem value={4}>Empresa</MenuItem>
                     </Select>
                 </FormControl>
             </Grid>
@@ -145,7 +155,7 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
                         min: 1
                     }}
                     variant="outlined"
-                    value={appointmentData.guests}
+                    value={appointmentData.guests ? appointmentData.guests : 0}
                     onChange={(e) => onGuestsChange(e.target.value)}
                 />
             </Grid>
@@ -164,7 +174,7 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
                             variant='outlined'
                             color='success'
                             style={{ marginLeft: '10px' }}
-                            onClick={() => onFieldChange({ owners: appointmentData.owners ? [...appointmentData.owners, { id: Math.random().toString(16).slice(2) }] : [ { id: Math.random().toString(16).slice(2) }] })}>
+                            onClick={() => onFieldChange({ owners: appointmentData.owners ? [...appointmentData.owners, { id: Math.random().toString(16).slice(2) }] : [{ id: Math.random().toString(16).slice(2) }] })}>
                             <AddIcon />
                         </Button>
                     </Box>
@@ -172,7 +182,7 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
             </Grid>
 
             {
-            appointmentData.owners &&
+                appointmentData.owners &&
                 appointmentData.owners.map((owner: AppointmentOwner) => (
                     <Grid item xs={12} key={owner.id}>
                         <Accordion>
@@ -245,15 +255,13 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
                     <CardActionArea>
                         <CardMedia
                             component="img"
-                            height="220"
-                            image="https://images.pexels.com/photos/2747449/pexels-photo-2747449.jpeg?cs=srgb&dl=pexels-wolfgang-2747449.jpg&fm=jpg"
+                            height="220" 
+                            image={appointmentData.img}
                             alt="Imagen No Seleccionada"
                         />
                     </CardActionArea>
                     <CardActions style={{ flex: 1, justifyContent: 'center' }}>
-                        <Button size="small" color="primary" variant='contained'>
-                            Cargar imagen del evento
-                        </Button>
+                        <FileUpload onFileUpload={handleFileUpload} />
                     </CardActions>
                 </Card>
             </Grid>
