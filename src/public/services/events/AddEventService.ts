@@ -8,8 +8,7 @@ import { EventModel } from "../../models/EventModel";
 import { generateFirestoreId } from "../../utilities/FirebaseIdGenerator";
 
 export const addEvent = async (event: EventModel) => {
-    const eventId = generateFirestoreId();
-    console.log(eventId)
+    const eventId = generateFirestoreId(); 
     try {
         const firebaseEvent = {
             eventType: event.eventType,
@@ -22,14 +21,14 @@ export const addEvent = async (event: EventModel) => {
         }
 
         // TO DO: validate if user exists or not
-        
+
         event.owners.forEach(async (owner) => {
             const docRef = await addDoc(collection(db, "users"), owner);
             firebaseEvent.owners.push(docRef.id);
         });
 
         // Add a new document with a generated id.  
-        const eventDocRef = doc(db, "events", eventId); 
+        const eventDocRef = doc(db, "events", eventId);  
         await setDoc(eventDocRef, firebaseEvent); 
     } catch (error) {
         console.log(error)

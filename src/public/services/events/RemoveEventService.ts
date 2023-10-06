@@ -1,11 +1,21 @@
 
-import { deleteDoc, doc} from "firebase/firestore";
+import { deleteDoc, doc } from "firebase/firestore";
+import { ref, deleteObject } from "firebase/storage";
 
-import { db } from "../../../private/services/firebase/Firebase";
- 
+import { db, storage } from "../../../private/services/firebase/Firebase";
+
 export const deleteEvent = async (eventId: string) => {
 
-    // TO DO: remove associated img
-    
-    await deleteDoc(doc(db, "events", eventId.trim()));
+    console.log(' Elimino ', eventId)
+
+    // Create a reference to the file to delete
+    const desertRef = ref(storage, `img_${eventId.trim()}`);
+
+    // Delete the file 
+    deleteObject(desertRef).then(async () => {
+        // delete the doc
+        await deleteDoc(doc(db, "events", eventId.trim()));
+    }).catch((error) => {
+        console.log(error)
+    });
 }
