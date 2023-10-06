@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -60,7 +60,7 @@ export default function Dashboard() {
                 <Main open={open}>
                     <DrawerHeader />
                     <Typography variant='h4'>
-                        Eventos
+                            Eventos
                     </Typography>
                     <EventCalendar />
                 </Main>
