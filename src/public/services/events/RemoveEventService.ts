@@ -4,10 +4,7 @@ import { ref, deleteObject } from "firebase/storage";
 
 import { db, storage } from "../../../private/services/firebase/Firebase";
 
-export const deleteEvent = async (eventId: string) => {
-
-    console.log(' Elimino ', eventId)
-
+export const deleteEvent = async (eventId: string) => { 
     // Create a reference to the file to delete
     const desertRef = ref(storage, `img_${eventId.trim()}`);
 

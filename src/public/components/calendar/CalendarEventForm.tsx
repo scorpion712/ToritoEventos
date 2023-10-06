@@ -24,14 +24,16 @@ import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import AddIcon from '@mui/icons-material/Add';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { AppointmentOwner } from '../../models/AppointmentModel';
 
+import { AppointmentOwner } from '../../models/AppointmentModel';
 import FileUpload from '../FileUploadButton';
+import { eventTypeMap } from '../../models/EventType';
 
 
 export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: AppointmentForm.BasicLayoutProps) => {
 
     const onEventTypeChange = (value: string) => {
+        console.log(value)
         onFieldChange({ eventType: value })
     }
 
@@ -104,10 +106,11 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
                         <MenuItem value="">
                             <em>Seleccionar tipo de evento</em>
                         </MenuItem>
-                        <MenuItem value={1}>Cumpleanos</MenuItem>
-                        <MenuItem value={2}>Privado</MenuItem>
-                        <MenuItem value={3}>Reunion</MenuItem>
-                        <MenuItem value={4}>Empresa</MenuItem>
+                        {Object.keys(eventTypeMap).map((text) => (
+                            <MenuItem key={text} value={eventTypeMap[text]}>
+                                {text}
+                            </MenuItem>
+                        ))}
                     </Select>
                 </FormControl>
             </Grid>
@@ -255,7 +258,7 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
                     <CardActionArea>
                         <CardMedia
                             component="img"
-                            height="220" 
+                            height="220"
                             image={appointmentData.img}
                             alt="Imagen No Seleccionada"
                         />
