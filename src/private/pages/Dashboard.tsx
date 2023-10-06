@@ -34,9 +34,9 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     justifyContent: 'flex-end',
 }));
 
-import MenuAppBar from '../public/components/MenuAppBar'
-import MenuDrawer from '../public/components/MenuDrawer';
-import { EventCalendar } from '../public/components/Calendar';
+import MenuAppBar from '../../public/components/MenuAppBar'
+import MenuDrawer from '../../public/components/MenuDrawer';
+import { EventCalendar } from '../../public/components/Calendar';
 
 export default function Dashboard() {
     const [open, setOpen] = React.useState(false);
