@@ -1,6 +1,6 @@
 import { ThemeProvider, createTheme } from '@mui/material/styles'; 
 
-import Dashboard from './private/Dashboard';
+import Dashboard from './private/pages/Dashboard';
 
 const theme = createTheme({
 
