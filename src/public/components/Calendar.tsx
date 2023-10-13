@@ -22,7 +22,7 @@ import { EventModel } from '../models/EventModel';
 import { deleteEvent } from '../services/events/RemoveEventService';
 import { addEvent } from '../services/events/AddEventService';
 import { ErrorSnackbar } from './ErrorSnackbar';
-import { eventTypeReverseMap } from '../models/EventType';
+import { eventTypeReverseMap, getEventColorByType } from '../models/EventType';
 
 
 interface AppointmentOwner {
@@ -33,18 +33,6 @@ interface AppointmentOwner {
     email: string;
 }
 
-const getEventColorByType = (eventType: string) => {
-    switch (eventType.toString()) {
-        case "1":
-            return "#E9B546";
-        case "2":
-            return "#AF3B3B";
-        case "3":
-            return "#f1c232";
-        default:
-            return "#6F1E4F";
-    }
-}
 
 const Appointment = ({
     children, style, ...restProps
@@ -125,10 +113,6 @@ export const EventCalendar = () => {
                 setErrorMessage("La fecha de fin del evento no puede ser menor a la de inicio!");
                 return false;
             }
-            if (data.startDate > new Date()) {
-                setErrorMessage("No puede crear un evento para una fecha anterior!");
-                return false;
-            }
         }
         if (data.guests) {
             if (parseInt(data.guests) < 1) {
@@ -180,7 +164,9 @@ export const EventCalendar = () => {
         }
         if (changed) {
             const appointmentToChange = data.find(appointment => appointment.id === Object.keys(changed)[0]);
-            changed[Object.keys(changed)[0]].title = `${changed[Object.keys(changed)[0]].eventType ? changed[Object.keys(changed)[0]].eventType : appointmentToChange?.eventType} ${changed[Object.keys(changed)[0]].guests ? changed[Object.keys(changed)[0]].guests : appointmentToChange?.guests} invitados`;
+            changed[Object.keys(changed)[0]].title = `${changed[Object.keys(changed)[0]].eventType ? eventTypeReverseMap[changed[Object.keys(changed)[0]].eventType] : eventTypeReverseMap[appointmentToChange?.eventType as any]} ${changed[Object.keys(changed)[0]].guests 
+                    ? changed[Object.keys(changed)[0]].guests 
+                    : appointmentToChange?.guests} invitados`;
             if (isChangeValid(changed[Object.keys(changed)[0]])) {
                 setData(data.map(appointment => (
                     changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment)));

@@ -102,6 +102,7 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
                         labelId="demo-simple-select-filled-label"
                         id="demo-simple-select-filled"
                         value={appointmentData.eventType}
+                        defaultValue={""}
                         onChange={(e) => onEventTypeChange(e.target.value)}>
                         <MenuItem value="">
                             <em>Seleccionar tipo de evento</em>
