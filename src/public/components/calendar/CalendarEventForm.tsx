@@ -32,8 +32,7 @@ import { eventTypeMap } from '../../models/EventType';
 
 export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: AppointmentForm.BasicLayoutProps) => {
 
-    const onEventTypeChange = (value: string) => {
-        console.log(value)
+    const onEventTypeChange = (value: string) => { 
         onFieldChange({ eventType: value })
     }
 

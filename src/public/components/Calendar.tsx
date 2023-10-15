@@ -168,6 +168,7 @@ export const EventCalendar = () => {
                     ? changed[Object.keys(changed)[0]].guests 
                     : appointmentToChange?.guests} invitados`;
             if (isChangeValid(changed[Object.keys(changed)[0]])) {
+                addEvent({...appointmentToChange, ...changed[Object.keys(changed)[0]]} as EventModel);
                 setData(data.map(appointment => (
                     changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment)));
             } else {

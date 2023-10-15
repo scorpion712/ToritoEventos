@@ -8,8 +8,8 @@ import { EventModel } from "../../models/EventModel";
 import { generateFirestoreId } from "../../utilities/FirebaseIdGenerator";
 
 export const addEvent = async (event: EventModel) => {
-    const eventId = generateFirestoreId(); 
-    try {
+    const eventId = event.id ? event.id : generateFirestoreId(); 
+    try { 
         const firebaseEvent = {
             eventType: event.eventType,
             endDate: Timestamp.fromDate(event.endDate),
