@@ -17,6 +17,7 @@ import {
     MenuItem,
     Select,
     TextField,
+    TextareaAutosize,
 } from '@mui/material';
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import PhoneIcon from '@mui/icons-material/Phone';
@@ -28,24 +29,20 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { AppointmentOwner } from '../../models/AppointmentModel';
 import FileUpload from '../FileUploadButton';
 import { eventTypeMap } from '../../models/EventType';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 
 export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: AppointmentForm.BasicLayoutProps) => {
 
-    const onEventTypeChange = (value: string) => { 
+    const onEventTypeChange = (value: string) => {
         onFieldChange({ eventType: value })
     }
 
     const onStartDateChange = (value: string) => {
         const date = appointmentData.startDate;
         date.setHours(value.substring(0, value.indexOf(':')), value.substring(value.indexOf(':') + 1))
+        onFieldChange({ endDate: date })
         onFieldChange({ startDate: date })
-    }
-
-    const onEndDateChange = (value: string) => {
-        const endDate = new Date(value);
-        endDate.setTime(endDate.getTime() - 3 * 60 * 60 * 1000);
-        onFieldChange({ endDate: endDate })
     }
 
     const onGuestsChange = (value: string) => {
@@ -83,6 +80,17 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
         onFieldChange({ owners: appointmentData.owners })
     }
 
+    const onOwnerBornDateChange = (owner: AppointmentOwner, value: Date) => {
+        if (value.getTime() < new Date().getTime()) {
+            owner.bornDate = value;
+            onFieldChange({ owners: appointmentData.owners })
+        }
+    }
+
+    const onNotesChange = (value: string) => {
+        onFieldChange({ notes: value })
+    }
+
     const handleFileUpload = (file: File) => {
         // read the image and set it on appointment
         const reader = new FileReader();
@@ -94,7 +102,7 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
 
     return (
         <Grid container style={{ marginRight: '10px', marginLeft: '0px', marginTop: '0' }} spacing={3}>
-            <Grid item xs={12}>
+            <Grid item xs={12} md={6}>
                 <FormControl variant="outlined" style={{ minWidth: '100%' }}>
                     <InputLabel id="demo-simple-select-filled-label" >Tipo de Evento</InputLabel>
                     <Select
@@ -114,7 +122,7 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
                     </Select>
                 </FormControl>
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={12} md={3}>
                 <TextField
                     id="time"
                     label="Hora Inicio"
@@ -133,20 +141,7 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
                     onChange={(e) => onStartDateChange(e.target.value)}
                 />
             </Grid>
-            <Grid item xs={6}>
-                <TextField
-                    id="datetime-local"
-                    label="Fecha (mm-dd-yyyy) y hora de fin"
-                    type="datetime-local"
-                    defaultValue="2017-05-24T10:30"
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    value={appointmentData.endDate.toISOString().substring(0, 16)}
-                    onChange={(e) => onEndDateChange(e.target.value)}
-                />
-            </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={12} md={3}>
                 <TextField
                     id="outlined-number"
                     label="Invitados"
@@ -198,7 +193,7 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Grid container spacing={2}>
-                                    <Grid item xs={6}>
+                                    <Grid item xs={12} md={6}>
                                         <TextField id="outlined-basic" label="Nombre" variant="outlined" fullWidth
                                             InputProps={{
                                                 startAdornment: (
@@ -210,7 +205,7 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
                                             value={owner.name}
                                             onChange={(e) => onOwnerNameChange(owner, e.target.value)} />
                                     </Grid>
-                                    <Grid item xs={6}>
+                                    <Grid item xs={12} md={6}>
                                         <TextField id="outlined-basic" label="Apellido" variant="outlined" fullWidth
                                             InputProps={{
                                                 startAdornment: (
@@ -222,7 +217,7 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
                                             value={owner.surname}
                                             onChange={(e) => onOwnerSurnameChange(owner, e.target.value)} />
                                     </Grid>
-                                    <Grid item xs={6}>
+                                    <Grid item xs={12} md={6}>
                                         <TextField id="outlined-basic" label="Telefono" variant="outlined" fullWidth
                                             InputProps={{
                                                 startAdornment: (
@@ -234,7 +229,7 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
                                             value={owner.phone}
                                             onChange={(e) => onOwnerPhoneChange(owner, e.target.value)} />
                                     </Grid>
-                                    <Grid item xs={6}>
+                                    <Grid item xs={12} md={6}>
                                         <TextField id="outlined-basic" label="Email" variant="outlined" fullWidth
                                             InputProps={{
                                                 startAdornment: (
@@ -246,13 +241,48 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
                                             value={owner.email}
                                             onChange={(e) => onOwnerEmailChange(owner, e.target.value)} />
                                     </Grid>
+
+                                    <Grid item xs={12} md={6}>
+                                        <DatePicker
+                                            label="Nacimiento"
+                                            format="DD/MM/YYYY"
+                                            defaultValue={new Date('01-01-2000')}
+                                            value={owner.bornDate}
+                                            onChange={(e) => onOwnerBornDateChange(owner, e as Date)} />
+                                    </Grid>
                                 </Grid>
                             </AccordionDetails>
                         </Accordion>
                     </Grid>
                 ))
             }
-
+            <Grid item xs={12}>
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
+                    >
+                        <Typography style={{ fontSize: '1rem' }}>Notas del evento:</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    id="outlined-multiline-flexible"
+                                    label="Notas"
+                                    multiline
+                                    maxRows={4}
+                                    fullWidth
+                                    value={appointmentData.notes}
+                                    onChange={(e) => onNotesChange(e.target.value)}
+                                    
+                                />
+                            </Grid>
+                        </Grid>
+                    </AccordionDetails>
+                </Accordion>
+            </Grid>
             <Grid item xs={12}>
                 <Card>
                     <CardActionArea>

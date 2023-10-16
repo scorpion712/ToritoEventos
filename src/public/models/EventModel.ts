@@ -11,4 +11,5 @@ export interface EventModel {
     imgFile: File;
     owners: AppointmentOwner [];
     ownersId: string [];
+    notes: string;
 }

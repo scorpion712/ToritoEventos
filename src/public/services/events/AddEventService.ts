@@ -17,7 +17,8 @@ export const addEvent = async (event: EventModel) => {
             guests: event.guests,
             title: event.title,
             img: await saveImage(event.imgFile, eventId),
-            owners: [] as string[]
+            owners: [] as string[],
+            notes: event.notes
         }
 
         // TO DO: validate if user exists or not

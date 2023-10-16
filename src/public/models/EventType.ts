@@ -25,12 +25,12 @@ export const getEventColorByType = (eventType: string) => {
         case "3":
             return "#f1c232";
         case "4":
-            return "#E9B546";
+            return "#9172b6";
         case "5":
-            return "#AF3B3B";
+            return "#73364c";
         case "6":
-            return "#f1c232";
+            return "#d79ee1";
         default:
-            return "#6F1E4F";
+            return "#ecba90";
     }
 }

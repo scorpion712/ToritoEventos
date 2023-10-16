@@ -1,4 +1,6 @@
 import { ThemeProvider, createTheme } from '@mui/material/styles'; 
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 import Dashboard from './private/pages/Dashboard';
 
@@ -36,7 +38,9 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Dashboard />
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='ES'>
+        <Dashboard />
+      </LocalizationProvider>
     </ThemeProvider>
   )
 }

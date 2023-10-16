@@ -4,4 +4,5 @@ export interface AppointmentOwner {
     surname: string;
     phone: string;
     email: string;
+    bornDate: Date;
 }
