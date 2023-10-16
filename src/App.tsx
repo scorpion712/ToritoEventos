@@ -1,8 +1,7 @@
-import { ThemeProvider, createTheme } from '@mui/material/styles'; 
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-
-import Dashboard from './private/pages/Dashboard';
+import Router from './routes/Router';
 
 const theme = createTheme({
 
@@ -33,13 +32,12 @@ const theme = createTheme({
   },
 });
 
-
 function App() {
 
   return (
     <ThemeProvider theme={theme}>
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='ES'>
-        <Dashboard />
+        <Router />
       </LocalizationProvider>
     </ThemeProvider>
   )
