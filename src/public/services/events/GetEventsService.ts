@@ -1,9 +1,10 @@
-
-import { query, where } from "firebase/firestore";
+import { doc, getDoc, query, where } from "firebase/firestore";
 import { collection, getDocs } from "firebase/firestore";
+
 import { EventModel } from "../../models/EventModel"; 
 import { db } from "../../../private/services/firebase/Firebase";
 import { adaptFirebaseEventToEventModel } from "../../adapters/events/FirebaseToEventModel.adapter";
+import { adaptFirebaseUserToUserModel } from "../../adapters/users/FireabaseToUserModel";
  
 
 export const getEvents = async () => {
@@ -17,6 +18,15 @@ export const getEvents = async () => {
     try {
         const querySnapshot = await getDocs(givenQuery);
         events = adaptFirebaseEventToEventModel(querySnapshot);
+        events.forEach((event) => {
+            event.owners = []; // initialize owners array 
+            event.ownersId.forEach(async (ownerId) => {
+                const docRef = doc(db, "users", ownerId.trim());
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists())
+                    event.owners.push(adaptFirebaseUserToUserModel(docSnap));
+            });
+        });
     } catch (error) {
         console.log("Error: ", error)
     }
@@ -29,6 +39,15 @@ export const getAllEvents = async () => {
     try {
         const querySnapshot = await getDocs(eventsCollectionRef);
         events = adaptFirebaseEventToEventModel(querySnapshot);
+        events.forEach((event) => {
+            event.owners = [];
+            event.ownersId.forEach(async (ownerId) => {
+                const docRef = doc(db, "users", ownerId.trim());
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists())
+                    event.owners.push(adaptFirebaseUserToUserModel(docSnap));
+            });
+        });
     } catch (error) {
         console.log("Error: ", error)
     }
