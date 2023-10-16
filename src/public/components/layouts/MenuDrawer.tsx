@@ -12,6 +12,7 @@ import ListItemText from '@mui/material/ListItemText';
 import PeopleIcon from '@mui/icons-material/People';
 import EventIcon from '@mui/icons-material/Event';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import { Link } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -22,7 +23,8 @@ interface MenuDrawerProps {
 
 interface MenuItem {
     itemName: string;
-    itemIcon:  React.ReactElement
+    itemIcon:  React.ReactElement;
+    dir: string;
 }
 
 const DrawerHeader = styled('div')(({ theme }) => ({
@@ -37,15 +39,18 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 const MenuItemsList : MenuItem[] = [
     {
         itemName: "Eventos",
-        itemIcon: <EventIcon />
+        itemIcon: <EventIcon />,
+        dir: '/'
     },
     {
         itemName: "Clientes",
-        itemIcon: <PeopleIcon />
+        itemIcon: <PeopleIcon />,
+        dir: '/users'
     },
     {
         itemName: "Histórico",
-        itemIcon: <CalendarMonthIcon />
+        itemIcon: <CalendarMonthIcon />,
+        dir: '/events'
     },
 ];
 
@@ -76,7 +81,7 @@ export default function MenuDrawer(props: MenuDrawerProps) {
         <Divider />
         <List>
           {MenuItemsList.map((item) => (
-            <ListItem key={item.itemName} disablePadding>
+            <ListItem button component={Link} to={item.dir} key={item.itemName} disablePadding>
               <ListItemButton>
                 <ListItemIcon>
                   {item.itemIcon}
