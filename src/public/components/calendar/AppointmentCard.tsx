@@ -3,6 +3,7 @@ import { AppointmentTooltip } from '@devexpress/dx-react-scheduler-material-ui';
 import { Grid } from '@mui/material';
 import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 import AccessTimeIcon from '@mui/icons-material/AccessTime'; 
+
 import { AppointmentOwner } from '../../models/AppointmentModel';
 
 export const AppointmentCard = (({

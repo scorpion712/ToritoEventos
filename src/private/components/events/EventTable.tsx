@@ -1,8 +1,8 @@
 import React from 'react'
-
-import { getAllEvents } from '../../../public/services/events/GetEventsService';
-import { EventModel } from '../../../public/models/EventModel';
 import { Table, TableContainer, TablePagination } from '@mui/material';
+
+import { getAllEvents } from '../../../public/services/events/getEventsService';
+import { EventModel } from '../../../public/models/EventModel';
 import EventTableHeader from './EventTableHeader';
 import EventTableBody from './EventTableBody';
 
@@ -33,7 +33,7 @@ export default function EventTable() {
     }, [])
 
     return (
-        <>
+        <React.Fragment>
             <TableContainer>
                 <Table aria-label="collapsible table">
                     <EventTableHeader />
@@ -57,6 +57,6 @@ export default function EventTable() {
                     fontSize: "1rem",
                 }}
             />
-        </>
+        </React.Fragment>
     )
 }

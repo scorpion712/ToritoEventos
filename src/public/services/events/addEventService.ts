@@ -1,9 +1,8 @@
-
 import { Timestamp, addDoc, doc, setDoc } from "firebase/firestore";
 import { collection } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-import { db, storage } from "../../../private/services/firebase/Firebase";
+import { db, storage } from "../../../private/services/firebase/firebase";
 import { EventModel } from "../../models/EventModel";
 import { generateFirestoreId } from "../../utilities/FirebaseIdGenerator";
 

@@ -14,13 +14,14 @@ import {
     ChangeSet,
     CurrentTimeIndicator
 } from '@devexpress/dx-react-scheduler-material-ui';
+
 import { BasicLayout } from './calendar/CalendarEventForm';
 import { AppointmentCard } from './calendar/AppointmentCard';
 import { AppointmentCardHeader } from './calendar/AppointmentCardHeader';
-import { getEvents } from '../services/events/GetEventsService';
+import { getEvents } from '../services/events/getEventsService';
 import { EventModel } from '../models/EventModel'; 
-import { deleteEvent } from '../services/events/RemoveEventService';
-import { addEvent } from '../services/events/AddEventService';
+import { deleteEvent } from '../services/events/removeEventService';
+import { addEvent } from '../services/events/addEventService';
 import { ErrorSnackbar } from './ErrorSnackbar';
 import { eventTypeReverseMap, getEventColorByType } from '../models/EventType';
 
@@ -134,7 +135,6 @@ export const EventCalendar = () => {
 
         setShowSnackBar(false);
     };
-
 
     const editingOptions = {
         allowAdding: true,

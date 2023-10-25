@@ -10,20 +10,58 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography'; 
+import Typography from '@mui/material/Typography';
+import { FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput } from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff'; 
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+
 import Copyright from '../components/Copyright';
+import { isEmailValid, isPasswordValid } from '../utilities/Validators'; 
+import { authUser } from '../services/auth/auth.service';
+import { getUserById } from '../../private/services/users/getUsersService';
+import { createUser } from '../../redux/states/user';
 
 export default function LoginPage() {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [showPassword, setShowPassword] = React.useState(false);
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+    }; 
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
-        // TO DO:
-        // Auth using Firebase
-        // Save user information and token
+
+        const userEmail = data.get('email') as string;
+        const userPassword = data.get('password') as string
+
+        if (!isEmailValid(userEmail)) {
+            console.log(`Error, email invalido => context para error y snackbar afuera`);
+            return;
+        }
+        if (!isPasswordValid(userPassword)) {
+            console.log(`Error, password invalido => context para error y snackbar afuera`);
+            return;
+        }
+
+        const userCredential = await authUser(userEmail, userPassword);
+
+        if (userCredential) {
+            const userData = await getUserById(userCredential.user.uid);
+            dispatch(createUser(userData));
+            if (userData) {
+                navigate("/");
+            } else {
+                navigate("/registration");
+            }
+        } else {
+            console.log("Error de usuario invalido => context para error y snackbar afuera");
+        }
     };
 
     return (
@@ -70,16 +108,31 @@ export default function LoginPage() {
                             autoComplete="email"
                             autoFocus
                         />
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label="Contraseña"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                        />
+
+                        <FormControl fullWidth
+                            variant="outlined">
+                            <InputLabel htmlFor="password">Password</InputLabel>
+                            <OutlinedInput
+                                id="password"
+                                required
+                                fullWidth
+                                name="password"
+                                type={showPassword ? 'text' : 'password'}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                            edge="end"
+                                        >
+                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
+                                label="Password"
+                            />
+                        </FormControl>
                         <FormControlLabel
                             control={<Checkbox value="remember" color="primary" />}
                             label="Recordarme"

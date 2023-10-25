@@ -1,8 +1,6 @@
-
-
-import { EventModel } from '../../../public/models/EventModel';
 import { TableBody } from '@mui/material';
 
+import { EventModel } from '../../../public/models/EventModel';
 import { EventTableRow } from './EventTableRow';
 
 interface EventTableBodyProps {

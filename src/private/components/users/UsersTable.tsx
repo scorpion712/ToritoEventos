@@ -2,7 +2,7 @@ import React from 'react'
 import { Table, TableContainer, TablePagination } from '@mui/material';
 
 import { AppointmentOwner } from '../../../public/models/AppointmentModel';
-import { getUsers } from '../../services/users/GetUsersService';
+import { getUsers } from '../../services/users/getUsersService';
 import UsersTableHeader from './UsersTableHeader';
 import UsersTableBody from './UsersTableBody';
 

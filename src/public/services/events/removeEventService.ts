@@ -1,8 +1,7 @@
-
 import { deleteDoc, doc } from "firebase/firestore";
 import { ref, deleteObject } from "firebase/storage";
 
-import { db, storage } from "../../../private/services/firebase/Firebase";
+import { db, storage } from "../../../private/services/firebase/firebase";
 
 export const deleteEvent = async (eventId: string) => { 
     // Create a reference to the file to delete

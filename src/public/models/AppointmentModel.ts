@@ -4,5 +4,9 @@ export interface AppointmentOwner {
     surname: string;
     phone: string;
     email: string;
-    bornDate: Date;
+    bornDate?: Date;
+    address: string;
+    city: string;
+    state: string;
+    password?: string;
 }

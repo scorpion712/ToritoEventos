@@ -1,7 +1,9 @@
 import React from 'react'
 import { Box, Container, CssBaseline, styled } from '@mui/material'
+
 import MenuAppBar from './MenuAppBar';
 import MenuDrawer from './MenuDrawer';
+import Copyright from '../Copyright';
 
 const drawerWidth = 240;
 
@@ -61,6 +63,7 @@ export default function Layout({children}: LayoutProps) {
                 <Container maxWidth="xl" >
                     {children}
                 </Container>
+                <Copyright sx={{ mt: 5 }}/>
             </Main>
         </Box>
     </Box>

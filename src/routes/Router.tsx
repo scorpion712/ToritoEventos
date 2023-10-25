@@ -1,46 +1,41 @@
-
 import * as React from "react";
 import {
-    createBrowserRouter,
-    RouterProvider,
+  BrowserRouter,
+  Route
 } from "react-router-dom";
+import { Provider } from "react-redux";
 
 import Dashboard from "../private/pages/Dashboard";
-import ErrorPage from "../public/views/ErrorPage";
 import Events from "../private/pages/Events";
-import Users from "../private/pages/Users";
-import LoginPage from "../public/views/LoginPage";
+import Users from "../private/pages/Users"; 
 import SignUpPage from "../public/views/SignUpPage";
+import RegistrationPage from "../public/views/RegistrationPage";
+import { PublicRoutes } from "../models";
+import { AuthGuard } from "../guards";
+import { RoutersWithNotFound } from "../public/utilities";
+import store from "../redux/store";
 
-const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <Dashboard />,
-      errorElement: <ErrorPage />,
-    },
-    {
-      path: "/events",
-      element: <Events />,
-    },
-    {
-      path: "/users",
-      element: <Users />,
-    },
-    {
-      path: "/login",
-      element: <LoginPage />,
-    },
-    {
-      path: "/signup",
-      element: <SignUpPage />,
-    },
-  ]);
+const Login  = React.lazy(() => import("../public/views/LoginPage"));
 
-  
 export default function Router() {
-    return (
-        <React.StrictMode>
-          <RouterProvider router={router} />
-        </React.StrictMode>
-    )
+  return (
+    <React.StrictMode>
+      <React.Suspense fallback={<>Spinner</>}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <RoutersWithNotFound>
+              <Route element={<AuthGuard />}>
+                <Route path='/events' element={<Events />} />
+                <Route path='/users' element={<Users />} />
+              </Route>
+              <Route path='/' element={<Dashboard />} />
+              <Route path={PublicRoutes.LOGIN} element={<Login />} />
+              <Route path={PublicRoutes.SIGN_UP} element={<SignUpPage />} />
+              <Route path={PublicRoutes.REGISTRATION} element={<RegistrationPage />} />
+            </RoutersWithNotFound>
+          </BrowserRouter>
+        </Provider>
+      </React.Suspense>
+    </React.StrictMode>
+  )
 }

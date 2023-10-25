@@ -1,4 +1,5 @@
 import { DocumentData, DocumentSnapshot } from "firebase/firestore";
+
 import { AppointmentOwner } from "../../models/AppointmentModel";
 
 export const adaptFirebaseUserToUserModel = (docSnap: DocumentSnapshot<DocumentData, DocumentData>) => {

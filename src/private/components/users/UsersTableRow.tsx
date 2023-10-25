@@ -36,7 +36,7 @@ export default function UsersTableRow(props : UsersTableRowProps) {
           align="center" 
           style={{ fontSize: "1.3rem" }}
         >
-          {GetPersonAge(user.bornDate)}
+          {GetPersonAge(user.bornDate as Date)}
         </TableCell> 
         <TableCell
           component="th"

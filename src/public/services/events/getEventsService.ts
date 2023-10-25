@@ -2,7 +2,7 @@ import { doc, getDoc, query, where } from "firebase/firestore";
 import { collection, getDocs } from "firebase/firestore";
 
 import { EventModel } from "../../models/EventModel"; 
-import { db } from "../../../private/services/firebase/Firebase";
+import { db } from "../../../private/services/firebase/firebase";
 import { adaptFirebaseEventToEventModel } from "../../adapters/events/FirebaseToEventModel.adapter";
 import { adaptFirebaseUserToUserModel } from "../../adapters/users/FireabaseToUserModel";
  
