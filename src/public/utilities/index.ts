@@ -1,5 +1,6 @@
 export * from './FirebaseIdGenerator';
 export * from './FirebaseTimestampToDate';
 export * from './GetPersonAge';
+export * from './LocalStorage';
+export { default as RoutesWithNotFound } from './RoutesWithNotFound.utility';
 export * from './Validators';
-export { default as RoutersWithNotFound } from './routers-with-not-found';

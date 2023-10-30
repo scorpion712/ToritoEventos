@@ -4,10 +4,10 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircle from '@mui/icons-material/AccountCircle'; 
-import MenuItem from '@mui/material/MenuItem';
+import AccountCircle from '@mui/icons-material/AccountCircle';  
 import Menu from '@mui/material/Menu';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+import { Logout } from '../../../components/Logout';
 
 const drawerWidth = 240;
 
@@ -38,8 +38,7 @@ const AppBar = styled(MuiAppBar, {
 export default function MenuAppBar(props: MenuAppBarProps) { 
 
   const { handleDrawerOpen } = props;
-
-  const [auth, setAuth] = React.useState(true);
+ 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
  
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -65,8 +64,7 @@ export default function MenuAppBar(props: MenuAppBarProps) {
         </IconButton>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Torito Eventos
-        </Typography>
-        {auth && (
+        </Typography> 
           <div>
             <IconButton
               size="large"
@@ -93,10 +91,9 @@ export default function MenuAppBar(props: MenuAppBarProps) {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleClose}>Cerrar Sesión</MenuItem>
+              <Logout />
             </Menu>
-          </div>
-        )}
+          </div> 
       </Toolbar>
     </AppBar> 
   );

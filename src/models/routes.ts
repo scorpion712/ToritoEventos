@@ -1,9 +1,12 @@
 export const PublicRoutes = {
     'LOGIN' : 'login',
     'SIGN_UP': 'signup',
-    'REGISTRATION': 'registration'
+    'NOT_VERIFIED_EMAIL': 'verify'
 }
 
 export const PrivateRoutes = {
-    'DASHBOARD': 'dashboard'
+    'DASHBOARD': 'dashboard',
+    'REGISTRATION': 'registration',
+    'EVENTS': 'events',
+    'USERS': 'users'
 }

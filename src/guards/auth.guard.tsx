@@ -7,7 +7,7 @@ import { PublicRoutes } from "../models";
 export const AuthGuard = () => {
     const userState = useSelector((store: AppStore) => store.user);
     
-    return userState.accessToken && userState.isAdmin ? <Outlet/> : <Navigate replace to={PublicRoutes.LOGIN}/>;
+    return userState.id && userState.isVerified ? <Outlet/> : <Navigate replace to={PublicRoutes.LOGIN}/>;
 }
 
 export default AuthGuard;

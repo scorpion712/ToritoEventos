@@ -8,20 +8,30 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Link } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 import UserForm from '../components/registration/UserForm';
 import UserConfirm from '../components/registration/UserConfirm';
 import Layout from '../components/layouts/Layout';
 import { AppointmentOwner } from '../models/AppointmentModel';
+import { isOver18 } from '../utilities';
+import { useSelector } from 'react-redux';
+import { AppStore } from '../../redux/store';
+import { registerUserForm } from '../services/user/createUser.service';
+import { PrivateRoutes } from '../../models';
 
 const steps = ['Completa tus datos', 'Verifica tus datos'];
 
-export default function RegistrationPage() { 
+const isUserDataValid = (user: AppointmentOwner) => user.name && user.surname && user.phone && user.phone.length == 10 && user.address && user.city && user.state && user.bornDate != null && isOver18(user.bornDate || new Date()) || false;
+
+export default function RegistrationPage() {
+    const userStore = useSelector((store: AppStore) => store.user);
+    const navigate = useNavigate();
 
     function getStepContent(step: number) {
         switch (step) {
             case 0:
-                return <UserForm user={user} onChange={onFieldChange} />;
+                return <UserForm user={user} onChange={onFieldChange} hasErrors={formErrors} />;
             case 1:
                 return <UserConfirm user={user} />;
             default:
@@ -29,8 +39,10 @@ export default function RegistrationPage() {
         }
     }
 
+    const [formErrors, setFormErrors] = React.useState(false);
     const [activeStep, setActiveStep] = React.useState(0);
     const [user, setUser] = React.useState({
+        email: userStore.email,
         name: "",
         surname: "",
         phone: "",
@@ -41,16 +53,36 @@ export default function RegistrationPage() {
     } as AppointmentOwner);
 
     const handleNext = async () => {
-        setActiveStep(activeStep + 1);
+        if (activeStep === steps.length - 1) {
+            await registerUserForm(user) && setActiveStep(activeStep + 1);
+            return;
+        }
+        const userValid = isUserDataValid(user);
+        setFormErrors(!userValid);
+        if (userValid)
+            setActiveStep(activeStep + 1);
     };
 
     const handleBack = () => {
         setActiveStep(activeStep - 1);
     };
 
-    const onFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setUser({ ...user, [e.target.name]: e.target.value })
+    const onFieldChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | Date) => {
+        if (e instanceof Date) {
+            setUser({ ...user, bornDate: e })
+        } else {
+            setUser({ ...user, [e.target.name]: e.target.value })
+        }
     }
+
+    React.useEffect(() => {
+        if (!userStore.name) {
+            navigate(`/${PrivateRoutes.REGISTRATION}`, { replace: true });
+        }
+        // load cities
+            // on select city, load states
+    }, []);
+
 
     return (
         <Layout>

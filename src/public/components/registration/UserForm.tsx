@@ -1,19 +1,21 @@
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField'; 
+import TextField from '@mui/material/TextField';
 import { DatePicker } from '@mui/x-date-pickers';
 
 import { AppointmentOwner } from '../../models/AppointmentModel';
+import { isOver18 } from '../../utilities';
 
 interface UserFormProps {
-    onChange: (e: React.ChangeEvent<HTMLInputElement |HTMLTextAreaElement> ) => void,
-    user: AppointmentOwner
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | Date) => void,
+  user: AppointmentOwner,
+  hasErrors: boolean
 }
 
-export default function UserForm(props : UserFormProps) {
+export default function UserForm(props: UserFormProps) {
 
-    const { user, onChange } = props;
+  const { user, onChange, hasErrors} = props;
 
   return (
     <React.Fragment>
@@ -25,6 +27,7 @@ export default function UserForm(props : UserFormProps) {
           <TextField
             required
             id="firstName"
+            error={hasErrors && user.name.length <= 0}
             name="name"
             label="Nombre"
             fullWidth
@@ -39,6 +42,7 @@ export default function UserForm(props : UserFormProps) {
             required
             id="lastName"
             name="surname"
+            error={hasErrors && user.surname.length <= 0}
             label="Apellido"
             fullWidth
             autoComplete="family-name"
@@ -52,6 +56,7 @@ export default function UserForm(props : UserFormProps) {
             required
             id="address"
             name="address"
+            error={hasErrors && user.address.length <= 0}
             label="Direccion"
             fullWidth
             autoComplete="shipping address-line1"
@@ -66,6 +71,7 @@ export default function UserForm(props : UserFormProps) {
             id="city"
             name="city"
             label="Ciudad"
+            error={hasErrors && user.city.length <= 0}
             fullWidth
             autoComplete="shipping address-level2"
             variant="standard"
@@ -78,6 +84,7 @@ export default function UserForm(props : UserFormProps) {
             required
             id="state"
             name="state"
+            error={hasErrors && user.state.length <= 0}
             label="Provincia"
             fullWidth
             variant="standard"
@@ -90,6 +97,7 @@ export default function UserForm(props : UserFormProps) {
             required
             id="phone"
             name="phone"
+            error={hasErrors && user.phone.length != 10}
             label="Telefono"
             fullWidth
             variant="standard"
@@ -98,9 +106,19 @@ export default function UserForm(props : UserFormProps) {
           />
         </Grid>
         <Grid item xs={12} md={6}>
-            <DatePicker
-                label="Nacimiento"
-                format="DD/MM/YYYY" />
+          <DatePicker
+            label="Nacimiento"
+            value={user.bornDate} 
+            slotProps={{
+              textField: {
+                helperText: 
+                  <Typography variant='caption' color='error'>
+                    {hasErrors && !isOver18(user.bornDate as Date) ? "Debe ser mayor a 18" : ""}
+                  </Typography>,
+              },
+            }}
+            onChange={(e) => onChange(new Date(e as Date))}
+            format="DD/MM/YYYY" />
         </Grid>
       </Grid>
     </React.Fragment>

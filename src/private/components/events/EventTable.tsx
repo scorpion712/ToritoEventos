@@ -1,7 +1,7 @@
 import React from 'react'
 import { Table, TableContainer, TablePagination } from '@mui/material';
 
-import { getAllEvents } from '../../../public/services/events/getEventsService';
+import { getAllEvents } from '../../../public/services/events/getEvents.service';
 import { EventModel } from '../../../public/models/EventModel';
 import EventTableHeader from './EventTableHeader';
 import EventTableBody from './EventTableBody';

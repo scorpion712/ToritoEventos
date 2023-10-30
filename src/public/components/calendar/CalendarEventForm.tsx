@@ -29,9 +29,14 @@ import { AppointmentOwner } from '../../models/AppointmentModel';
 import FileUpload from '../FileUploadButton';
 import { eventTypeMap } from '../../models/EventType';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { useSelector } from 'react-redux';
+import { AppStore } from '../../../redux/store';
+import { Roles } from '../../../models/roles';
 
 
 export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: AppointmentForm.BasicLayoutProps) => {
+
+    const userStore = useSelector((store: AppStore) => store.user);
 
     const onEventTypeChange = (value: string) => {
         onFieldChange({ eventType: value })
@@ -156,29 +161,31 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
                     onChange={(e) => onGuestsChange(e.target.value)}
                 />
             </Grid>
-            <Grid item xs={12}>
-                <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-                    <Typography style={{ fontSize: '1.3rem' }}>Organizador/es</Typography>
-                    <Box sx={{ display: 'flex', alignItems: 'flex-end', float: 'right', marginLeft: 'auto' }}>
-                        <Button
-                            variant='outlined'
-                            color='error'
-                            style={{ marginLeft: 'auto' }}
-                            onClick={() => onDeleteOwner()}>
-                            <DeleteForeverIcon />
-                        </Button>
-                        <Button
-                            variant='outlined'
-                            color='success'
-                            style={{ marginLeft: '10px' }}
-                            onClick={() => onFieldChange({ owners: appointmentData.owners ? [...appointmentData.owners, { id: Math.random().toString(16).slice(2) }] : [{ id: Math.random().toString(16).slice(2) }] })}>
-                            <AddIcon />
-                        </Button>
-                    </Box>
-                </Box>
-            </Grid>
 
             {
+                userStore.rol === Roles.ADMIN &&
+                <Grid item xs={12}>
+                    <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                        <Typography style={{ fontSize: '1.3rem' }}>Organizador/es</Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'flex-end', float: 'right', marginLeft: 'auto' }}>
+                            <Button
+                                variant='outlined'
+                                color='error'
+                                style={{ marginLeft: 'auto' }}
+                                onClick={() => onDeleteOwner()}>
+                                <DeleteForeverIcon />
+                            </Button>
+                            <Button
+                                variant='outlined'
+                                color='success'
+                                style={{ marginLeft: '10px' }}
+                                onClick={() => onFieldChange({ owners: appointmentData.owners ? [...appointmentData.owners, { id: Math.random().toString(16).slice(2) }] : [{ id: Math.random().toString(16).slice(2) }] })}>
+                                <AddIcon />
+                            </Button>
+                        </Box>
+                    </Box>
+                </Grid>
+                &&
                 appointmentData.owners &&
                 appointmentData.owners.map((owner: AppointmentOwner) => (
                     <Grid item xs={12} key={owner.id}>
@@ -275,7 +282,7 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
                                     fullWidth
                                     value={appointmentData.notes}
                                     onChange={(e) => onNotesChange(e.target.value)}
-                                    
+
                                 />
                             </Grid>
                         </Grid>

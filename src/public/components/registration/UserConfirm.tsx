@@ -55,7 +55,7 @@ export default function UserConfirm(props: UserConfirmProps) {
               <ListItemIcon>
                 <CakeIcon />
               </ListItemIcon>
-              <ListItemText primary={user.bornDate?.toDateString()} />
+              <ListItemText primary={user.bornDate?.toLocaleDateString('ES-es')} />
             </ListItemButton>
           </ListItem> 
           <ListItem disablePadding>

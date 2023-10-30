@@ -9,3 +9,12 @@ export const isPasswordValid = (password: string) => {
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
     return passwordRegex.test(password);
   };
+
+export const isOver18 = (birthdate: Date): boolean => {
+  if (!birthdate) return false;
+  // Calculate the difference in milliseconds
+  const differenceInMilliseconds = new Date().getTime() - birthdate.getTime();
+
+  // Calculate the difference in years
+  return differenceInMilliseconds / (1000 * 60 * 60 * 24 * 365.25) >= 18;
+}

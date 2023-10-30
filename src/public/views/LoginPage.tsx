@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,25 +12,39 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff'; 
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
 
 import Copyright from '../components/Copyright';
-import { isEmailValid, isPasswordValid } from '../utilities/Validators'; 
+import { isEmailValid, isPasswordValid } from '../utilities/Validators';
 import { authUser } from '../services/auth/auth.service';
 import { getUserById } from '../../private/services/users/getUsersService';
-import { createUser } from '../../redux/states/user';
+import { createUser, resetUser, userKey } from '../../redux/states/user';
+import { PrivateRoutes, PublicRoutes } from '../../models';
+import { clearLocalStorage } from '../utilities/LocalStorage';
+import { adaptFirebaseUserCredentialToUserInfo } from '../adapters/users';
 
 export default function LoginPage() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [showPassword, setShowPassword] = React.useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+    const [errorEmail, setErrorEmail] = useState("");
+    const [errorPassword, setErrorPassword] = useState("");
+
+    useEffect(() => {
+        clearLocalStorage(userKey);
+        dispatch(resetUser());
+        navigate(`/${PublicRoutes.LOGIN}`, { replace: true });
+    }, []);
+
 
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-    }; 
+    };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -41,24 +54,27 @@ export default function LoginPage() {
         const userPassword = data.get('password') as string
 
         if (!isEmailValid(userEmail)) {
-            console.log(`Error, email invalido => context para error y snackbar afuera`);
+            setErrorEmail("Ingrese un formato de email válido");
             return;
         }
+        setErrorEmail("");
+
         if (!isPasswordValid(userPassword)) {
-            console.log(`Error, password invalido => context para error y snackbar afuera`);
+            setErrorPassword("El password debe tener al menos 8 caracteres, una mayúscula y un número");
             return;
         }
+        setErrorPassword("");
 
-        const userCredential = await authUser(userEmail, userPassword);
+        const user = await authUser(userEmail, userPassword);
 
-        if (userCredential) {
-            const userData = await getUserById(userCredential.user.uid);
-            dispatch(createUser(userData));
-            if (userData) {
-                navigate("/");
-            } else {
-                navigate("/registration");
-            }
+        if (user) {
+            if (user.emailVerified) {
+                const userData = await getUserById(user.uid);
+                dispatch(createUser(adaptFirebaseUserCredentialToUserInfo(user)));
+                navigate(`/${userData ? "" : PrivateRoutes.REGISTRATION}`, { replace: true });
+            } 
+            else 
+                navigate(`/${PublicRoutes.NOT_VERIFIED_EMAIL}`, { replace: true });
         } else {
             console.log("Error de usuario invalido => context para error y snackbar afuera");
         }
@@ -102,19 +118,25 @@ export default function LoginPage() {
                             margin="normal"
                             required
                             fullWidth
+                            error={errorEmail ? true : false}
                             id="email"
                             label="Email"
                             name="email"
                             autoComplete="email"
                             autoFocus
                         />
-
+                        {
+                            errorEmail &&
+                            <Typography variant='caption' color='error'>{errorEmail}</Typography>
+                        }
                         <FormControl fullWidth
-                            variant="outlined">
+                            variant="outlined"
+                            sx={{ mt: 1 }}>
                             <InputLabel htmlFor="password">Password</InputLabel>
                             <OutlinedInput
                                 id="password"
                                 required
+                                error={errorPassword ? true : false}
                                 fullWidth
                                 name="password"
                                 type={showPassword ? 'text' : 'password'}
@@ -132,6 +154,10 @@ export default function LoginPage() {
                                 }
                                 label="Password"
                             />
+                            {
+                                errorPassword &&
+                                <Typography variant='caption' color='error'>{errorPassword}</Typography>
+                            }
                         </FormControl>
                         <FormControlLabel
                             control={<Checkbox value="remember" color="primary" />}
@@ -152,7 +178,7 @@ export default function LoginPage() {
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link href="#" variant="body2">
+                                <Link href={PublicRoutes.SIGN_UP} variant="body2">
                                     {"Aún no está registrado? Registrese"}
                                 </Link>
                             </Grid>

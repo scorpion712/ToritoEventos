@@ -12,4 +12,5 @@ export interface EventModel {
     owners: AppointmentOwner [];
     ownersId: string [];
     notes: string;
+    confirmed: boolean;
 }

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react'; 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -17,13 +17,17 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import Copyright from '../components/Copyright';
 import { isEmailValid, isPasswordValid } from '../utilities/Validators';
-import { UserCredential } from 'firebase/auth';  
+import { UserCredential } from 'firebase/auth';
 import { createUser } from '../services/auth/signIn.service';
+import { PublicRoutes } from '../../models';
 
 export default function SignUpPage() {
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const [userCredentials, setUserCredentials] = React.useState<UserCredential>();
+  const [userCredentials, setUserCredentials] = useState<UserCredential>();
+
+  const [errorEmail, setErrorEmail] = useState("");
+  const [errorPassword, setErrorPassword] = useState("");
 
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -37,13 +41,16 @@ export default function SignUpPage() {
     const userPassword = data.get('password') as string
 
     if (!isEmailValid(userEmail)) {
-      console.log(`Error, email invalido => context para error y snackbar afuera`);
+      setErrorEmail("Ingrese un formato de email válido");
       return;
     }
+    setErrorEmail("");
+
     if (!isPasswordValid(userPassword)) {
-      console.log(`Error, password invalido=> context para error y snackbar afuera`);
+      setErrorPassword("El password debe tener al menos 8 caracteres, una mayúscula y un número");
       return;
     }
+    setErrorPassword("");
 
     const user = await createUser(userEmail, userPassword);
     setUserCredentials(user);
@@ -73,9 +80,9 @@ export default function SignUpPage() {
                 Gracias por registrarte en Torito.
               </Typography>
               <Typography variant="subtitle1">
-                Te enviaremos un mail dando la bienvenida y te contaremos un poco sobre quienes somos.
+                Revisa tu correo electrónico para confirmar el registro de tu cuenta y luego poder acceder a la plataforma.
               </Typography>
-              <Typography variant="body2" color="text.secondary" align="center" sx={{m: 1}}> 
+              <Typography variant="body2" color="text.secondary" align="center" sx={{ m: 1 }}>
                 <Link color="inherit" href="/login">
                   Inicia sesión para continuar
                 </Link>
@@ -92,7 +99,12 @@ export default function SignUpPage() {
                   label="Email"
                   name="email"
                   autoComplete="email"
+                  error={errorEmail ? true : false} 
                 />
+                {
+                    errorEmail && 
+                        <Typography variant='caption' color='error'>{errorEmail}</Typography>
+                }
               </Grid>
               <Grid item xs={12}>
                 <FormControl fullWidth
@@ -102,6 +114,7 @@ export default function SignUpPage() {
                     id="password"
                     required
                     fullWidth
+                    error={errorPassword ? true : false}
                     name="password"
                     type={showPassword ? 'text' : 'password'}
                     endAdornment={
@@ -119,6 +132,10 @@ export default function SignUpPage() {
                     label="Password"
                   />
                 </FormControl>
+                {
+                    errorPassword && 
+                        <Typography variant='caption' color='error'>{errorPassword}</Typography>
+                }
               </Grid>
               <Grid item xs={12}>
                 <FormControlLabel
@@ -137,7 +154,7 @@ export default function SignUpPage() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/login" variant="body2">
+                <Link href={PublicRoutes.LOGIN} variant="body2">
                   Ya posee una cuenta? Acceder
                 </Link>
               </Grid>

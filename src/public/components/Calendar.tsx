@@ -14,16 +14,19 @@ import {
     ChangeSet,
     CurrentTimeIndicator
 } from '@devexpress/dx-react-scheduler-material-ui';
+import { useSelector } from 'react-redux';
 
 import { BasicLayout } from './calendar/CalendarEventForm';
 import { AppointmentCard } from './calendar/AppointmentCard';
 import { AppointmentCardHeader } from './calendar/AppointmentCardHeader';
-import { getEvents } from '../services/events/getEventsService';
-import { EventModel } from '../models/EventModel'; 
-import { deleteEvent } from '../services/events/removeEventService';
-import { addEvent } from '../services/events/addEventService';
+import { getEvents } from '../services/events/getEvents.service';
+import { EventModel } from '../models/EventModel';
+import { deleteEvent } from '../services/events/removeEvent.service';
+import { addEvent } from '../services/events/addEvent.service';
 import { ErrorSnackbar } from './ErrorSnackbar';
 import { eventTypeReverseMap, getEventColorByType } from '../models/EventType';
+import { AppStore } from '../../redux/store';
+import { Roles } from '../../models/roles';
 
 
 interface AppointmentOwner {
@@ -53,14 +56,16 @@ const Appointment = ({
 
 
 export const EventCalendar = () => {
-
+    const userState = useSelector((store: AppStore) => store.user);
     React.useEffect(() => {
-        const fetchData = async () => {
-            const data = await getEvents();
-            setData(data);
-        };
+        if (userState.rol === Roles.ADMIN) {
+            const fetchData = async () => {
+                const data = await getEvents();
+                setData(data);
+            };
 
-        fetchData();
+            fetchData();
+        }
     }, [])
 
 
@@ -164,11 +169,11 @@ export const EventCalendar = () => {
         }
         if (changed) {
             const appointmentToChange = data.find(appointment => appointment.id === Object.keys(changed)[0]);
-            changed[Object.keys(changed)[0]].title = `${changed[Object.keys(changed)[0]].eventType ? eventTypeReverseMap[changed[Object.keys(changed)[0]].eventType] : eventTypeReverseMap[appointmentToChange?.eventType as any]} ${changed[Object.keys(changed)[0]].guests 
-                    ? changed[Object.keys(changed)[0]].guests 
-                    : appointmentToChange?.guests} invitados`;
+            changed[Object.keys(changed)[0]].title = `${changed[Object.keys(changed)[0]].eventType ? eventTypeReverseMap[changed[Object.keys(changed)[0]].eventType] : eventTypeReverseMap[appointmentToChange?.eventType as any]} ${changed[Object.keys(changed)[0]].guests
+                ? changed[Object.keys(changed)[0]].guests
+                : appointmentToChange?.guests} invitados`;
             if (isChangeValid(changed[Object.keys(changed)[0]])) {
-                addEvent({...appointmentToChange, ...changed[Object.keys(changed)[0]]} as EventModel);
+                addEvent({ ...appointmentToChange, ...changed[Object.keys(changed)[0]] } as EventModel);
                 setData(data.map(appointment => (
                     changed[appointment.id] ? { ...appointment, ...changed[appointment.id] } : appointment)));
             } else {

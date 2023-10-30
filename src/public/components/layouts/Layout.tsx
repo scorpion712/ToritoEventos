@@ -4,6 +4,9 @@ import { Box, Container, CssBaseline, styled } from '@mui/material'
 import MenuAppBar from './MenuAppBar';
 import MenuDrawer from './MenuDrawer';
 import Copyright from '../Copyright';
+import { useSelector } from 'react-redux';
+import { AppStore } from '../../../redux/store';
+import { Roles } from '../../../models/roles';
 
 const drawerWidth = 240;
 
@@ -39,7 +42,8 @@ interface LayoutProps {
     children: React.ReactNode;// | string | JSX.Element | JSX.Element[] | (() => JSX.Element)
 }
 
-export default function Layout({children}: LayoutProps) {
+export default function Layout({ children }: LayoutProps) {
+    const userStore = useSelector((store: AppStore) => store.user);
     const [open, setOpen] = React.useState(false);
 
     const handleDrawerOpen = () => {
@@ -50,22 +54,25 @@ export default function Layout({children}: LayoutProps) {
         setOpen(false);
     };
 
-  return (
-    <Box sx={{ flexGrow: 1 }}>
-        <CssBaseline />
-        <MenuAppBar handleDrawerOpen={handleDrawerOpen}  />
-        <Box sx={{ display: 'flex' }}>
-            <MenuDrawer
-                handleDrawerClose={handleDrawerClose}
-                openDrawer={open} />
-            <Main open={open}>
-                <DrawerHeader />
-                <Container maxWidth="xl" >
-                    {children}
-                </Container>
-                <Copyright sx={{ mt: 5 }}/>
-            </Main>
+    return (
+        <Box sx={{ flexGrow: 1 }}>
+            <CssBaseline />
+            <MenuAppBar handleDrawerOpen={handleDrawerOpen} />
+            <Box sx={{ display: 'flex' }}>
+                {
+                    userStore.rol === Roles.ADMIN &&
+                        <MenuDrawer
+                            handleDrawerClose={handleDrawerClose}
+                            openDrawer={open} />
+                }
+                <Main open={open}>
+                    <DrawerHeader />
+                    <Container maxWidth="xl" >
+                        {children}
+                    </Container>
+                    <Copyright sx={{ mt: 5 }} />
+                </Main>
+            </Box>
         </Box>
-    </Box>
-  )
+    )
 }

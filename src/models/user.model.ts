@@ -1,7 +1,11 @@
+import { Roles } from "./roles";
+
 export interface UserInfo {
-    id: number;
-    name: string;
+    id: string; 
     accessToken: string;
+    refreshToken: string;
+    name: string;
     email: string;
-    isAdmin: boolean;
+    isVerified: boolean;
+    rol: Roles;
 }

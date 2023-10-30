@@ -1,6 +1,10 @@
-import { AppointmentTooltip } from '@devexpress/dx-react-scheduler-material-ui'; 
+import { AppointmentTooltip } from '@devexpress/dx-react-scheduler-material-ui';
 import { Box, IconButton, styled } from '@mui/material';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import { useSelector } from 'react-redux';
+
+import { AppStore } from '../../../redux/store';
+import { Roles } from '../../../models/roles';
 
 const PREFIX = 'Demo';
 
@@ -20,23 +24,30 @@ const StyledIconButton = styled(IconButton)(() => ({
     },
 }));
 
-export const AppointmentCardHeader = (({
+export const AppointmentCardHeader = ({
     children, appointmentData, ...restProps
-}: AppointmentTooltip.HeaderProps) => (
-    <Box>
-        <AppointmentTooltip.Header
-            {...restProps}
-            appointmentData={appointmentData}
-        >
+}: AppointmentTooltip.HeaderProps) => {
 
-            <StyledIconButton
-                /* eslint-disable-next-line no-alert */
-                onClick={() => alert("Confirmar evento: Proximamente")}
-                size="large"
+    const userState = useSelector((store: AppStore) => store.user);
+
+    return (
+        <Box>
+            <AppointmentTooltip.Header
+                {...restProps}
+                appointmentData={appointmentData}
             >
-                <AssignmentTurnedInIcon color='success' />
-            </StyledIconButton>
-        </AppointmentTooltip.Header>
-        <img src={`${appointmentData.img}`} height={260} width={'100%'} alt=" " />
-    </Box>
-));
+                {
+                    userState.rol === Roles.ADMIN &&
+                    <StyledIconButton
+                        /* eslint-disable-next-line no-alert */
+                        onClick={() => alert("Confirmar evento: Proximamente")}
+                        size="large"
+                    >
+                        <AssignmentTurnedInIcon color='success' />
+                    </StyledIconButton>
+                }
+            </AppointmentTooltip.Header>
+            <img src={`${appointmentData.img}`} height={260} width={'100%'} alt=" " />
+        </Box>
+    );
+};

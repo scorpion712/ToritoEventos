@@ -17,10 +17,12 @@ export const addEvent = async (event: EventModel) => {
             title: event.title,
             img: await saveImage(event.imgFile, eventId),
             owners: [] as string[],
-            notes: event.notes
+            notes: event.notes,
+            confirmed: event.owners ? false : true
         }
 
         // TO DO: validate if user exists or not
+        console.log("validate if user already exists")
 
         event.owners.forEach(async (owner) => {
             const docRef = await addDoc(collection(db, "users"), owner);
