@@ -25,6 +25,7 @@ import { createUser, resetUser, userKey } from '../../redux/states/user';
 import { PrivateRoutes, PublicRoutes } from '../../models';
 import { clearLocalStorage } from '../utilities/LocalStorage';
 import { adaptFirebaseUserCredentialToUserInfo } from '../adapters/users';
+import { CustomInput } from '../../components';
 
 export default function LoginPage() {
     const dispatch = useDispatch();
@@ -60,7 +61,7 @@ export default function LoginPage() {
         setErrorEmail("");
 
         if (!isPasswordValid(userPassword)) {
-            setErrorPassword("El password debe tener al menos 8 caracteres, una mayúscula y un número");
+            setErrorPassword("La contraseña debe tener al menos 8 caracteres, una mayúscula y un número");
             return;
         }
         setErrorPassword("");
@@ -114,25 +115,15 @@ export default function LoginPage() {
                         Iniciar Sesión
                     </Typography>
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            error={errorEmail ? true : false}
-                            id="email"
-                            label="Email"
-                            name="email"
-                            autoComplete="email"
-                            autoFocus
-                        />
-                        {
-                            errorEmail &&
-                            <Typography variant='caption' color='error'>{errorEmail}</Typography>
-                        }
+                        <CustomInput inputId='email'
+                            inputLabel='Email'
+                            inputName='email'
+                            errorMessage={errorEmail} /> 
+                        
                         <FormControl fullWidth
                             variant="outlined"
                             sx={{ mt: 1 }}>
-                            <InputLabel htmlFor="password">Password</InputLabel>
+                            <InputLabel htmlFor="password">Contraseña</InputLabel>
                             <OutlinedInput
                                 id="password"
                                 required
@@ -152,7 +143,7 @@ export default function LoginPage() {
                                         </IconButton>
                                     </InputAdornment>
                                 }
-                                label="Password"
+                                label="Contraseña"
                             />
                             {
                                 errorPassword &&

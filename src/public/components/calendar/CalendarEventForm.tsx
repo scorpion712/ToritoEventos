@@ -4,6 +4,7 @@ import {
     Accordion,
     AccordionDetails,
     AccordionSummary,
+    Autocomplete,
     Box,
     Button,
     Card,
@@ -27,16 +28,30 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 import { AppointmentOwner } from '../../models/AppointmentModel';
 import FileUpload from '../FileUploadButton';
-import { eventTypeMap } from '../../models/EventType';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { eventTypeMap } from '../../models/EventType'; 
 import { useSelector } from 'react-redux';
 import { AppStore } from '../../../redux/store';
 import { Roles } from '../../../models/roles';
+import { useEffect, useState } from 'react';
+import { getUsers } from '../../../private/services/users/getUsersService'; 
 
 
 export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: AppointmentForm.BasicLayoutProps) => {
 
     const userStore = useSelector((store: AppStore) => store.user);
+
+    const [registeredUsers, setRegisteredUsers] = useState<AppointmentOwner[]>([]);
+
+    useEffect(() => {
+        if (userStore.rol === Roles.ADMIN) {
+            const fetchData = async () => {
+                const data = await getUsers();
+                setRegisteredUsers(data.filter(u => u.email)); 
+            };
+
+            fetchData();
+        }
+    }, []);
 
     const onEventTypeChange = (value: string) => {
         onFieldChange({ eventType: value })
@@ -80,16 +95,17 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
     }
 
     const onOwnerEmailChange = (owner: AppointmentOwner, value: string) => {
+        const registeredUser = registeredUsers.find(u => u.email == value);
         owner.email = value;
-        onFieldChange({ owners: appointmentData.owners })
-    }
-
-    const onOwnerBornDateChange = (owner: AppointmentOwner, value: Date) => {
-        if (value.getTime() < new Date().getTime()) {
-            owner.bornDate = value;
-            onFieldChange({ owners: appointmentData.owners })
-        }
-    }
+        if (registeredUser) {
+            owner.id = registeredUser.id;
+            owner.bornDate = registeredUser.bornDate; 
+            owner.phone = registeredUser.phone;
+            owner.name = registeredUser.name;
+            owner.surname = registeredUser.surname;
+        } 
+        onFieldChange({ owners: appointmentData.owners });
+    } 
 
     const onNotesChange = (value: string) => {
         onFieldChange({ notes: value })
@@ -126,7 +142,7 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
                     </Select>
                 </FormControl>
             </Grid>
-            <Grid item xs={12} md={3}>
+            <Grid item xs={12} sm={6} md={3}>
                 <TextField
                     id="time"
                     label="Hora Inicio"
@@ -145,9 +161,9 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
                     onChange={(e) => onStartDateChange(e.target.value)}
                 />
             </Grid>
-            <Grid item xs={12} md={3}>
+            <Grid item xs={12} sm={6} md={3}>
                 <TextField
-                    id="outlined-number"
+                    id="guests-number"
                     label="Invitados"
                     type="number"
                     InputLabelProps={{
@@ -185,8 +201,8 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
                         </Box>
                     </Box>
                 </Grid>
-                &&
-                appointmentData.owners &&
+            }
+            {appointmentData.owners &&
                 appointmentData.owners.map((owner: AppointmentOwner) => (
                     <Grid item xs={12} key={owner.id}>
                         <Accordion>
@@ -199,6 +215,33 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Grid container spacing={2}>
+                                    <Grid item xs={12} md={6}>
+                                        <Autocomplete
+                                            freeSolo
+                                            id="autocomplete-emails"
+                                            disableClearable
+                                            onInputChange={(e, newValue) => onOwnerEmailChange(owner, newValue)}
+                                            value={owner.email}
+                                            options={registeredUsers.map((user) => user.email)}
+                                            renderInput={(params) => (
+                                                <TextField
+                                                    {...params}
+                                                    label="Email"
+                                                    InputProps={{
+                                                        ...params.InputProps,
+                                                        type: 'search',
+                                                        startAdornment: (
+                                                            <InputAdornment position="start">
+                                                                <AlternateEmailIcon />
+                                                            </InputAdornment>)
+                                                    }}
+                                                    variant="outlined"
+                                                    fullWidth
+                                                />
+                                            )}
+                                        />
+                                    </Grid>
+
                                     <Grid item xs={12} md={6}>
                                         <TextField id="outlined-basic" label="Nombre" variant="outlined" fullWidth
                                             InputProps={{
@@ -234,27 +277,6 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
                                             }}
                                             value={owner.phone}
                                             onChange={(e) => onOwnerPhoneChange(owner, e.target.value)} />
-                                    </Grid>
-                                    <Grid item xs={12} md={6}>
-                                        <TextField id="outlined-basic" label="Email" variant="outlined" fullWidth
-                                            InputProps={{
-                                                startAdornment: (
-                                                    <InputAdornment position="start">
-                                                        <AlternateEmailIcon />
-                                                    </InputAdornment>
-                                                ),
-                                            }}
-                                            value={owner.email}
-                                            onChange={(e) => onOwnerEmailChange(owner, e.target.value)} />
-                                    </Grid>
-
-                                    <Grid item xs={12} md={6}>
-                                        <DatePicker
-                                            label="Nacimiento"
-                                            format="DD/MM/YYYY"
-                                            defaultValue={new Date('01-01-2000')}
-                                            value={owner.bornDate}
-                                            onChange={(e) => onOwnerBornDateChange(owner, e as Date)} />
                                     </Grid>
                                 </Grid>
                             </AccordionDetails>

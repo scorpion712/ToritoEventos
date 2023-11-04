@@ -29,8 +29,9 @@ export default function Router() {
             <RoutesWithNotFound>
               <Route element={<AuthGuard />}>
                 <Route element={<RoleGuard rol={Roles.ADMIN} />}>
-                  <Route path={PrivateRoutes.EVENTS} element={<Events />} />
                   <Route path={PrivateRoutes.USERS} element={<Users />} />
+                  <Route path={PrivateRoutes.EVENTS} element={<Events />} />
+                  <Route path='/' element={<Dashboard />} />
                 </Route>
                 <Route path={PrivateRoutes.REGISTRATION} element={<RegistrationPage />} />
                 <Route element={<UserGuard/>}>

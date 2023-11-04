@@ -1,8 +1,7 @@
-import React, { useState } from 'react'; 
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
+import CssBaseline from '@mui/material/CssBaseline'; 
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
@@ -20,6 +19,7 @@ import { isEmailValid, isPasswordValid } from '../utilities/Validators';
 import { UserCredential } from 'firebase/auth';
 import { createUser } from '../services/auth/signIn.service';
 import { PublicRoutes } from '../../models';
+import { CustomInput } from '../../components';
 
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -92,19 +92,11 @@ export default function SignUpPage() {
           : <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email"
-                  name="email"
-                  autoComplete="email"
-                  error={errorEmail ? true : false} 
-                />
-                {
-                    errorEmail && 
-                        <Typography variant='caption' color='error'>{errorEmail}</Typography>
-                }
+                <CustomInput 
+                  inputId='email'
+                  inputLabel='Email'
+                  inputName='email'
+                  errorMessage={errorEmail} />
               </Grid>
               <Grid item xs={12}>
                 <FormControl fullWidth
@@ -133,8 +125,8 @@ export default function SignUpPage() {
                   />
                 </FormControl>
                 {
-                    errorPassword && 
-                        <Typography variant='caption' color='error'>{errorPassword}</Typography>
+                  errorPassword &&
+                  <Typography variant='caption' color='error'>{errorPassword}</Typography>
                 }
               </Grid>
               <Grid item xs={12}>

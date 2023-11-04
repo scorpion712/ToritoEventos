@@ -57,6 +57,7 @@ const Appointment = ({
 
 export const EventCalendar = () => {
     const userState = useSelector((store: AppStore) => store.user);
+    
     React.useEffect(() => {
         if (userState.rol === Roles.ADMIN) {
             const fetchData = async () => {
@@ -71,8 +72,7 @@ export const EventCalendar = () => {
 
     const [showSnackBar, setShowSnackBar] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState("");
-    const [data, setData] = React.useState<EventModel[]>([]);
-
+    const [data, setData] = React.useState<EventModel[]>([]); 
 
     const isFormValid = (data: EventModel) => {
         if (!data.owners || data.owners?.length <= 0
@@ -87,7 +87,7 @@ export const EventCalendar = () => {
         if (data.startDate.getTime() > data.endDate.getTime()) {
             setErrorMessage("La fecha de fin del evento no puede ser menor a la de inicio!");
             return false;
-        }
+        } 
         if (data.startDate < new Date()) {
             setErrorMessage("No puede crear un evento para una fecha anterior!");
             return false;
@@ -102,10 +102,10 @@ export const EventCalendar = () => {
         return true;
     }
 
-    const isChangeValid = (data: EventModel) => {
+    const isChangeValid = (data: EventModel) => {  
         if (data.owners) {
             if (data.owners?.length <= 0
-                && !data.owners?.some((owner: AppointmentOwner) =>
+                || data.owners?.some((owner: AppointmentOwner) =>
                     owner.email?.length == 0
                     || owner.name?.length == 0
                     || owner.surname?.length == 0
@@ -116,7 +116,7 @@ export const EventCalendar = () => {
         }
         if (data.startDate) {
             if (data.startDate.getTime() > data.endDate.getTime()) {
-                setErrorMessage("La fecha de fin del evento no puede ser menor a la de inicio!");
+                setErrorMessage("La fecha del evento no puede ser menor a la de inicio!");
                 return false;
             }
         }
@@ -126,7 +126,6 @@ export const EventCalendar = () => {
                 return false;
             }
         }
-
         // si no tiene foto enviar la de torito
 
         return true;
@@ -155,7 +154,7 @@ export const EventCalendar = () => {
 
 
     const onCommitChanges = React.useCallback(({ added, changed, deleted }: ChangeSet) => {
-        if (added) {
+        if (added) { 
             added.title = `${eventTypeReverseMap[added.eventType]} ${added.guests} invitados`;
 
             if (isFormValid(added)) {
@@ -167,7 +166,7 @@ export const EventCalendar = () => {
                 return;
             }
         }
-        if (changed) {
+        if (changed) { 
             const appointmentToChange = data.find(appointment => appointment.id === Object.keys(changed)[0]);
             changed[Object.keys(changed)[0]].title = `${changed[Object.keys(changed)[0]].eventType ? eventTypeReverseMap[changed[Object.keys(changed)[0]].eventType] : eventTypeReverseMap[appointmentToChange?.eventType as any]} ${changed[Object.keys(changed)[0]].guests
                 ? changed[Object.keys(changed)[0]].guests

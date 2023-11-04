@@ -1,6 +1,6 @@
 import Typography from '@mui/material/Typography';
 
-import { EventCalendar } from '../../public/components/Calendar';
+import { EventCalendar } from '../../public/components/EventsCalendar';
 import Layout from '../../public/components/layouts/Layout';
 
 export default function Dashboard() {

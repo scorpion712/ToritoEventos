@@ -1,10 +1,12 @@
-import { Timestamp, addDoc, doc, setDoc } from "firebase/firestore";
-import { collection } from "firebase/firestore";
+import { Timestamp, doc, setDoc } from "firebase/firestore"; 
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 import { db, storage } from "../../../private/services/firebase/firebase";
 import { EventModel } from "../../models/EventModel";
 import { generateFirestoreId } from "../../utilities/FirebaseIdGenerator";
+import { getUsers } from "../../../private/services/users/getUsersService";
+import { createUser } from "../auth/signIn.service";
+import { AppointmentOwner } from "../../models/AppointmentModel";
 
 export const addEvent = async (event: EventModel) => {
     const eventId = event.id ? event.id : generateFirestoreId(); 
@@ -17,16 +19,27 @@ export const addEvent = async (event: EventModel) => {
             title: event.title,
             img: await saveImage(event.imgFile, eventId),
             owners: [] as string[],
-            notes: event.notes,
+            notes: event.notes || "",
             confirmed: event.owners ? false : true
         }
 
-        // TO DO: validate if user exists or not
-        console.log("validate if user already exists")
-
+        const registeredUsers = await getUsers();
         event.owners.forEach(async (owner) => {
-            const docRef = await addDoc(collection(db, "users"), owner);
-            firebaseEvent.owners.push(docRef.id);
+            if (!registeredUsers.find((user: AppointmentOwner) => user.id == owner.id)) {
+                // create user with default password
+                const userCredential = await createUser(owner.email, "Torito23");
+                // save user data
+                if (userCredential) {
+                    owner.id = userCredential.user.uid;
+                    await setDoc(doc(db, "users", owner.id), {
+                        name: owner.name || "",
+                        surname: owner.surname || "",
+                        phone: owner.phone || "",
+                        email: owner.email || "",
+                    });
+                    firebaseEvent.owners.push(owner.id);
+                }
+            }
         });
 
         // Add a new document with a generated id.  
@@ -39,16 +52,19 @@ export const addEvent = async (event: EventModel) => {
 
 
 const saveImage = async (image: File, eventId: string) => {
-    // Define a reference to the Firebase Storage location where you want to upload the file
-    const storageRef = ref(storage, `img_${eventId}`);
-    try {
-        // Upload the file to Firebase Storage
-        const snapshot = await uploadBytes(storageRef, image);
-
-        // Get uploaded image location
-        return await getDownloadURL(snapshot.ref);
-    } catch (error) {
-        console.error('Error uploading file:', error);
-        return "";
+    if (image) {
+        // Define a reference to the Firebase Storage location where you want to upload the file
+        const storageRef = ref(storage, `img_${eventId}`);
+        try {
+            // Upload the file to Firebase Storage
+            const snapshot = await uploadBytes(storageRef, image);
+    
+            // Get uploaded image location
+            return await getDownloadURL(snapshot.ref);
+        } catch (error) {
+            console.error('Error uploading file:', error);
+            return "";
+        }
     }
+    return "";
 }

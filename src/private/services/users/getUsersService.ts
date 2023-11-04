@@ -9,12 +9,12 @@ export const getUsers = async () => {
     const eventsCollectionRef = collection(db, "users");
     try {
         const querySnapshot = await getDocs(eventsCollectionRef);
-        querySnapshot.docs.map(doc => {
+        querySnapshot.docs.map(doc => { 
             users.push(adaptFirebaseUserToUserModel(doc));
         })
     } catch (error) {
         console.log("Error: ", error)
-    }
+    } 
     return users;
 }
 
