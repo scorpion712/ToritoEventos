@@ -10,36 +10,41 @@ import { AppointmentOwner } from "../../models/AppointmentModel";
 
 export const addEvent = async (event: EventModel) => {
     const eventId = event.id ? event.id : generateFirestoreId(); 
-    try { 
+    try {  
         const firebaseEvent = {
             eventType: event.eventType,
             endDate: Timestamp.fromDate(event.endDate),
             startDate: Timestamp.fromDate(event.startDate),
             guests: event.guests,
             title: event.title,
-            img: await saveImage(event.imgFile, eventId),
+            img: event.img ? 
+                    event.imgFile ? await saveImage(event.imgFile, eventId) 
+                        : event.img 
+                    : await saveImage(event.imgFile, eventId),
             owners: [] as string[],
             notes: event.notes || "",
             confirmed: event.owners ? false : true
         }
 
-        const registeredUsers = await getUsers();
+        const registeredUsers = await getUsers(); 
         event.owners.forEach(async (owner) => {
+            // if user is not registered
             if (!registeredUsers.find((user: AppointmentOwner) => user.id == owner.id)) {
                 // create user with default password
                 const userCredential = await createUser(owner.email, "Torito23");
-                // save user data
+                // if user exists, set existing id
                 if (userCredential) {
                     owner.id = userCredential.user.uid;
-                    await setDoc(doc(db, "users", owner.id), {
-                        name: owner.name || "",
-                        surname: owner.surname || "",
-                        phone: owner.phone || "",
-                        email: owner.email || "",
-                    });
-                    firebaseEvent.owners.push(owner.id);
                 }
             }
+            // save user data
+            await setDoc(doc(db, "users", owner.id), {
+                name: owner.name || "",
+                surname: owner.surname || "",
+                phone: owner.phone || "",
+                email: owner.email || "",
+            });
+            firebaseEvent.owners.push(owner.id);
         });
 
         // Add a new document with a generated id.  
@@ -51,7 +56,7 @@ export const addEvent = async (event: EventModel) => {
 }
 
 
-const saveImage = async (image: File, eventId: string) => {
+const saveImage = async (image: File, eventId: string) => { 
     if (image) {
         // Define a reference to the Firebase Storage location where you want to upload the file
         const storageRef = ref(storage, `img_${eventId}`);

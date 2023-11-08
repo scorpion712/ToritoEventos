@@ -5,8 +5,7 @@ import { db, storage } from "../../../private/services/firebase/firebase";
 
 export const deleteEvent = async (eventId: string) => { 
     // Create a reference to the file to delete
-    const desertRef = ref(storage, `img_${eventId.trim()}`);
-
+    const desertRef = ref(storage, `img_${eventId.trim()}`); 
     // Delete the file 
     deleteObject(desertRef).then(async () => {
         // delete the doc

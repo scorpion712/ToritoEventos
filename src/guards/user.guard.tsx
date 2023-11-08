@@ -6,7 +6,7 @@ import { PrivateRoutes } from "../models";
 function UserGuard() {
     const userState = useSelector((store: AppStore) => store.user);
 
-    return userState.name ? <Outlet /> : <Navigate replace to={PrivateRoutes.REGISTRATION} />;
+    return userState.name && userState.isVerified ? <Outlet /> : <Navigate replace to={PrivateRoutes.REGISTRATION} />;
 }
 
 export default UserGuard;

@@ -26,7 +26,7 @@ export const getEvents = async () => {
                 if (docSnap.exists())
                     event.owners.push(adaptFirebaseUserToUserModel(docSnap));
             });
-        });
+        }); 
     } catch (error) {
         console.log("Error: ", error)
     }

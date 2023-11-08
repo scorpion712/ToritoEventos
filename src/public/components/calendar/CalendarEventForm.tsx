@@ -34,6 +34,7 @@ import { AppStore } from '../../../redux/store';
 import { Roles } from '../../../models/roles';
 import { useEffect, useState } from 'react';
 import { getUsers } from '../../../private/services/users/getUsersService'; 
+import { validEmail } from '../../utilities';
 
 
 export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: AppointmentForm.BasicLayoutProps) => {
@@ -41,14 +42,15 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
     const userStore = useSelector((store: AppStore) => store.user);
 
     const [registeredUsers, setRegisteredUsers] = useState<AppointmentOwner[]>([]);
+    const [isEmailValid, setIsEmailValid] = useState(true);
+
+    const fetchData = async () => {
+        const data = await getUsers();
+        setRegisteredUsers(data.filter(u => u.email)); 
+    };
 
     useEffect(() => {
         if (userStore.rol === Roles.ADMIN) {
-            const fetchData = async () => {
-                const data = await getUsers();
-                setRegisteredUsers(data.filter(u => u.email)); 
-            };
-
             fetchData();
         }
     }, []);
@@ -90,21 +92,29 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
     }
 
     const onOwnerPhoneChange = (owner: AppointmentOwner, value: string) => {
-        owner.phone = value;
-        onFieldChange({ owners: appointmentData.owners })
+        // Remove non-numeric characters from the input
+        const input = value.replace(/\D/g, ''); 
+        if (input.length <= 10) {
+            owner.phone = input;
+            onFieldChange({ owners: appointmentData.owners })
+        }
     }
 
     const onOwnerEmailChange = (owner: AppointmentOwner, value: string) => {
-        const registeredUser = registeredUsers.find(u => u.email == value);
-        owner.email = value;
-        if (registeredUser) {
-            owner.id = registeredUser.id;
-            owner.bornDate = registeredUser.bornDate; 
-            owner.phone = registeredUser.phone;
-            owner.name = registeredUser.name;
-            owner.surname = registeredUser.surname;
-        } 
-        onFieldChange({ owners: appointmentData.owners });
+        const isValid = validEmail(value);
+        setIsEmailValid(isValid);
+        if (isValid) {
+            const registeredUser = registeredUsers.find(u => u.email == value);
+            owner.email = value;
+            if (registeredUser) {
+                owner.id = registeredUser.id;
+                owner.bornDate = registeredUser.bornDate; 
+                owner.phone = registeredUser.phone;
+                owner.name = registeredUser.name;
+                owner.surname = registeredUser.surname;
+            } 
+            onFieldChange({ owners: appointmentData.owners });
+        }
     } 
 
     const onNotesChange = (value: string) => {
@@ -119,7 +129,7 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
         };
         reader.readAsDataURL(file);
     };
-
+ 
     return (
         <Grid container style={{ marginRight: '10px', marginLeft: '0px', marginTop: '0' }} spacing={3}>
             <Grid item xs={12} md={6}>
@@ -146,8 +156,7 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
                 <TextField
                     id="time"
                     label="Hora Inicio"
-                    type="time"
-                    defaultValue="07:30"
+                    type="time" 
                     InputLabelProps={{
                         shrink: true,
                     }}
@@ -237,6 +246,7 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: Ap
                                                     }}
                                                     variant="outlined"
                                                     fullWidth
+                                                    helperText={!isEmailValid ? 'Dirección inválida' : ''}
                                                 />
                                             )}
                                         />

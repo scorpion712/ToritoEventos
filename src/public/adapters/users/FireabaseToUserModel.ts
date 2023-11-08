@@ -11,7 +11,7 @@ export const adaptFirebaseUserToUserModel = (docSnap: DocumentSnapshot<DocumentD
             surname: docSnap.data().surname,
             phone: docSnap.data().phone,
             email: docSnap.data().email,
-            bornDate: formatFirebaseTimestampToDate(docSnap.data().bornDate)
+            bornDate: docSnap.data().bornDate ? formatFirebaseTimestampToDate(docSnap.data().bornDate) : null
         } as AppointmentOwner;
     return {} as AppointmentOwner;
 }

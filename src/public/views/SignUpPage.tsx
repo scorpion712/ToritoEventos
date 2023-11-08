@@ -15,7 +15,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import Copyright from '../components/Copyright';
-import { isEmailValid, isPasswordValid } from '../utilities/Validators';
+import { validEmail, isPasswordValid } from '../utilities/Validators';
 import { UserCredential } from 'firebase/auth';
 import { createUser } from '../services/auth/signIn.service';
 import { PublicRoutes } from '../../models';
@@ -40,7 +40,7 @@ export default function SignUpPage() {
     const userEmail = data.get('email') as string;
     const userPassword = data.get('password') as string
 
-    if (!isEmailValid(userEmail)) {
+    if (!validEmail(userEmail)) {
       setErrorEmail("Ingrese un formato de email válido");
       return;
     }

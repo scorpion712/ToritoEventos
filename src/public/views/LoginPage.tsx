@@ -18,7 +18,7 @@ import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 
 import Copyright from '../components/Copyright';
-import { isEmailValid, isPasswordValid } from '../utilities/Validators';
+import { validEmail, isPasswordValid } from '../utilities/Validators';
 import { authUser } from '../services/auth/auth.service';
 import { getUserById } from '../../private/services/users/getUsersService';
 import { createUser, resetUser, userKey } from '../../redux/states/user';
@@ -54,7 +54,7 @@ export default function LoginPage() {
         const userEmail = data.get('email') as string;
         const userPassword = data.get('password') as string
 
-        if (!isEmailValid(userEmail)) {
+        if (!validEmail(userEmail)) {
             setErrorEmail("Ingrese un formato de email válido");
             return;
         }
