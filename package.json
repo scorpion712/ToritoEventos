@@ -3,11 +3,14 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://ToritoEventos.github.io/",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -d build -b main"
   },
   "dependencies": {
     "@date-io/date-fns": "^2.17.0",
@@ -27,6 +30,7 @@
     "@types/react-redux": "^7.1.28",
     "dayjs": "^1.11.10",
     "firebase": "10.4.0",
+    "gh-pages": "^6.0.0",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
     "react": "^18.2.0",
