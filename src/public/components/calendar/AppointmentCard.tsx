@@ -1,5 +1,4 @@
-import Typography from '@mui/material/FormControl';
-import { AppointmentTooltip } from '@devexpress/dx-react-scheduler-material-ui'; 
+import Typography from '@mui/material/FormControl'; 
 import { Grid } from '@mui/material';
 import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 import AccessTimeIcon from '@mui/icons-material/AccessTime'; 
@@ -8,7 +7,7 @@ import { AppointmentOwner } from '../../models/AppointmentModel';
 
 export const AppointmentCard = (({
     children, appointmentData, ...restProps
-}: AppointmentTooltip.ContentProps) => (
+}: any) => (
     <Grid container alignItems="center">
         <Grid item xs={12} style={{ marginLeft: '25px' }}>
             <Typography component='h2' style={{ fontWeight: '700', color: "#4E4E4E" }}>{appointmentData.title}</Typography>

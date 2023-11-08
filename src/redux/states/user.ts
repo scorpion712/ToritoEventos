@@ -21,6 +21,7 @@ export const userSlice = createSlice({
     reducers: {
         createUser: (state, action) => {
             persistLocalStorage<UserInfo>(userKey, action.payload);
+            state || true;
             return action.payload;
         },
         updateUser: (state, action) => {

@@ -11,7 +11,6 @@ import {
     AppointmentForm,
     AppointmentTooltip,
     DragDropProvider,
-    ChangeSet,
     CurrentTimeIndicator
 } from '@devexpress/dx-react-scheduler-material-ui';
 import { useSelector } from 'react-redux';
@@ -39,12 +38,11 @@ interface AppointmentOwner {
 
 
 const Appointment = ({
-    children, style, ...restProps
+    children, ...restProps
 }: Appointments.AppointmentProps) => (
     <Appointments.Appointment
         {...restProps}
         style={{
-            ...style,
             backgroundColor: `${getEventColorByType(restProps.data.eventType)}`,
             borderRadius: '8px',
             fontSize: '20px',
@@ -153,7 +151,7 @@ export const EventCalendar = () => {
     const [isAppointmentBeingCreated, setIsAppointmentBeingCreated] = React.useState(false);
 
 
-    const onCommitChanges = React.useCallback(({ added, changed, deleted }: ChangeSet) => {
+    const onCommitChanges = React.useCallback(({ added, changed, deleted }: any) => {
         if (added) { 
             added.title = `${eventTypeReverseMap[added.eventType]} ${added.guests} invitados`;
 
@@ -194,9 +192,9 @@ export const EventCalendar = () => {
 
     const CommandButton = React.useCallback(({ id, ...restProps }: AppointmentForm.CommandButtonProps) => {
         if (id === 'deleteButton') {
-            return <AppointmentForm.CommandButton id={id} {...restProps} disabled={!allowDeleting} />;
+            return <CommandButton id={id} {...restProps} />;
         }
-        return <AppointmentForm.CommandButton id={id} {...restProps} />;
+        return <CommandButton id={id} {...restProps} />;
     }, [allowDeleting]);
 
     const allowDrag = React.useCallback(

@@ -1,5 +1,4 @@
-import Typography from '@mui/material/FormControl';
-import { AppointmentForm } from '@devexpress/dx-react-scheduler-material-ui';
+import Typography from '@mui/material/FormControl'; 
 import {
     Accordion,
     AccordionDetails,
@@ -37,7 +36,7 @@ import { getUsers } from '../../../private/services/users/getUsersService';
 import { validEmail } from '../../utilities';
 
 
-export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: AppointmentForm.BasicLayoutProps) => {
+export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: any) => {
 
     const userStore = useSelector((store: AppStore) => store.user);
 

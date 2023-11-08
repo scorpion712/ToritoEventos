@@ -47,7 +47,7 @@ export const AppointmentCardHeader = ({
                     </StyledIconButton>
                 }
             </AppointmentTooltip.Header>
-            <img src={`${appointmentData.img}`} height={260} width={'100%'} alt=" " />
+            <img src={`${appointmentData?.img}`} height={260} width={'100%'} alt=" " />
         </Box>
     );
 };
