@@ -1,4 +1,5 @@
-import Typography from '@mui/material/FormControl'; 
+import Typography from '@mui/material/FormControl';
+import { AppointmentForm } from '@devexpress/dx-react-scheduler-material-ui';
 import {
     Accordion,
     AccordionDetails,
@@ -36,7 +37,7 @@ import { getUsers } from '../../../private/services/users/getUsersService';
 import { validEmail } from '../../utilities';
 
 
-export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: any) => {
+export const BasicLayout = ({ onFieldChange, appointmentData }: AppointmentForm.BasicLayoutProps) => {
 
     const userStore = useSelector((store: AppStore) => store.user);
 
@@ -60,7 +61,7 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: an
 
     const onStartDateChange = (value: string) => {
         const date = appointmentData.startDate;
-        date.setHours(value.substring(0, value.indexOf(':')), value.substring(value.indexOf(':') + 1))
+        (date as Date).setHours(parseInt(value.substring(0, value.indexOf(':'))), parseInt(value.substring(value.indexOf(':') + 1)))
         onFieldChange({ endDate: date })
         onFieldChange({ startDate: date })
     }
@@ -128,7 +129,7 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: an
         };
         reader.readAsDataURL(file);
     };
- 
+
     return (
         <Grid container style={{ marginRight: '10px', marginLeft: '0px', marginTop: '0' }} spacing={3}>
             <Grid item xs={12} md={6}>
@@ -162,7 +163,7 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: an
                     inputProps={{
                         step: 300, // 5 min
                     }}
-                    value={appointmentData.startDate.toLocaleTimeString('es-ES', {
+                    value={(appointmentData.startDate as Date).toLocaleTimeString('es-ES', {
                         hour: '2-digit',
                         minute: '2-digit',
                     })}
@@ -228,7 +229,7 @@ export const BasicLayout = ({ onFieldChange, appointmentData, ...restProps }: an
                                             freeSolo
                                             id="autocomplete-emails"
                                             disableClearable
-                                            onInputChange={(e, newValue) => onOwnerEmailChange(owner, newValue)}
+                                            onInputChange={(_e, newValue) => onOwnerEmailChange(owner, newValue)}
                                             value={owner.email}
                                             options={registeredUsers.map((user) => user.email)}
                                             renderInput={(params) => (
