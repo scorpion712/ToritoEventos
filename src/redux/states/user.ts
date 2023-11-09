@@ -1,6 +1,6 @@
 import {createSlice } from "@reduxjs/toolkit"; 
 import { UserInfo } from "../../models/user.model";
-import { clearLocalStorage, persistLocalStorage } from "../../public/utilities/LocalStorage";
+import { clearLocalStorage, persistLocalStorage } from "../../utilities/LocalStorage";
 import { Roles } from "../../models/roles";
 
 export const EmptyUserState: UserInfo = {

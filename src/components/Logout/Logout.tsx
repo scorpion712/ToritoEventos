@@ -1,5 +1,5 @@
 import { MenuItem } from '@mui/material'
-import { clearLocalStorage } from '../../public/utilities/LocalStorage'
+import { clearLocalStorage } from '../../utilities/LocalStorage'
 import { resetUser, userKey } from '../../redux/states/user'
 import { useNavigate } from 'react-router-dom'
 import { PublicRoutes } from '../../models';

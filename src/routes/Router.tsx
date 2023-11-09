@@ -9,16 +9,16 @@ import { PrivateRoutes, PublicRoutes } from "../models";
 import { AuthGuard, RoleGuard, UserGuard } from "../guards";
 import store from "../redux/store";
 import LoadingProgress from "../components/LoadingProgress";
-import { RoutesWithNotFound } from "../public/utilities";
+import { RoutesWithNotFound } from "../utilities";
 import { Roles } from "../models/roles"; 
 
-const Login = React.lazy(() => import("../public/views/LoginPage"));
-const SignUpPage = React.lazy(() => import("../public/views/SignUpPage"));
-const EmailNotVerified = React.lazy(() => import("../public/views/EmailNotVerified"));
-const Events = React.lazy(() => import("../private/pages/Events"));
-const Users = React.lazy(() => import("../private/pages/Users"));
-const RegistrationPage = React.lazy(() => import("../public/views/RegistrationPage"));
-const Dashboard = React.lazy(() => import("../private/pages/Dashboard"));
+const Login = React.lazy(() => import("../views/auth/LoginPage"));
+const SignUpPage = React.lazy(() => import("../views/auth/SignUpPage"));
+const EmailNotVerified = React.lazy(() => import("../views/auth/EmailNotVerified"));
+const Events = React.lazy(() => import("../pages/Events"));
+const Users = React.lazy(() => import("../pages/Users"));
+const RegistrationPage = React.lazy(() => import("../views/auth/RegistrationPage"));
+const Dashboard = React.lazy(() => import("../pages/Dashboard"));
 
 export default function Router() {
   return (
