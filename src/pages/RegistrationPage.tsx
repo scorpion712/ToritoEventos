@@ -41,6 +41,7 @@ export default function RegistrationPage() {
     const [formErrors, setFormErrors] = React.useState(false);
     const [activeStep, setActiveStep] = React.useState(0);
     const [user, setUser] = React.useState({
+        id: userStore.id,
         email: userStore.email,
         name: "",
         surname: "",

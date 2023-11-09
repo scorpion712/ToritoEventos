@@ -69,7 +69,7 @@ export default function LoginPage() {
 
         if (user) {
             if (user.emailVerified) {
-                const userData = await getUserById(user.uid);
+                const userData = await getUserById(user.uid); 
                 dispatch(createUser(adaptFirebaseUserCredentialToUserInfo(user)));
                 navigate(`/${userData ? "" : PrivateRoutes.REGISTRATION}`, { replace: true });
             } 
