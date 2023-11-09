@@ -10,7 +10,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "predeploy": "yarn run build",
-    "deploy": "gh-pages -d build -b main"
+    "deploy": "gh-pages -d build -b dist"
   },
   "dependencies": {
     "@date-io/date-fns": "^2.17.0",
