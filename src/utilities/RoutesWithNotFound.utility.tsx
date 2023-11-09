@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import ErrorPage from "../views/auth/ErrorPage";
+import ErrorPage from "../pages/ErrorPage";
 
 interface Props {
     children: JSX.Element | JSX.Element[];

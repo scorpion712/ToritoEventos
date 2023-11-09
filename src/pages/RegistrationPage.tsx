@@ -10,14 +10,14 @@ import Typography from '@mui/material/Typography';
 import { Link } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
  
-import { AppointmentOwner } from '../../models/AppointmentModel';
-import { isOver18 } from '../../utilities';
+import { AppointmentOwner } from '../models/AppointmentModel';
+import { isOver18 } from '../utilities';
 import { useSelector } from 'react-redux';
-import { AppStore } from '../../redux/store'; 
-import { PrivateRoutes } from '../../models';
-import { registerUserForm } from '../../services/user/createUser.service';
-import { UserConfirm, UserForm } from '../../components/registration';
-import { Layout } from '../../components/layouts';
+import { AppStore } from '../redux/store'; 
+import { PrivateRoutes } from '../models';
+import { registerUserForm } from '../services/user/createUser.service';
+import { UserConfirm, UserForm } from '../components/registration';
+import { Layout } from '../components/layouts';
 
 const steps = ['Completa tus datos', 'Verifica tus datos'];
 

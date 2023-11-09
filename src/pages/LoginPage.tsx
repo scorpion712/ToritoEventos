@@ -15,16 +15,17 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
-
-import Copyright from '../components/Copyright';
-import { validEmail, isPasswordValid } from '../utilities/Validators';
-import { authUser } from '../services/auth/auth.service';
+ 
+import { validEmail, isPasswordValid } from '../utilities/Validators'; 
 import { getUserById } from '../services/users/getUsersService';
-import { createUser, resetUser, userKey } from '../redux/states/user'; 
-import { clearLocalStorage } from '../utilities/LocalStorage'; 
+import { createUser, resetUser, userKey } from '../redux/states/user';
 import { PrivateRoutes, PublicRoutes } from '../models';
-import { adaptFirebaseUserCredentialToUserInfo } from '../adapters';
+import { clearLocalStorage } from '../utilities/LocalStorage'; 
 import { CustomInput } from '../components';
+import { authUser } from '../services/auth/auth.service';
+import { adaptFirebaseUserCredentialToUserInfo } from '../adapters';
+import Copyright from '../components/Copyright';
+
 export default function LoginPage() {
     const dispatch = useDispatch();
     const navigate = useNavigate();

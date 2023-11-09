@@ -12,12 +12,12 @@ import LoadingProgress from "../components/LoadingProgress";
 import { RoutesWithNotFound } from "../utilities";
 import { Roles } from "../models/roles"; 
 
-const Login = React.lazy(() => import("../views/auth/LoginPage"));
-const SignUpPage = React.lazy(() => import("../views/auth/SignUpPage"));
-const EmailNotVerified = React.lazy(() => import("../views/auth/EmailNotVerified"));
+const Login = React.lazy(() => import("../pages/LoginPage"));
+const SignUpPage = React.lazy(() => import("../pages/SignUpPage"));
+const EmailNotVerified = React.lazy(() => import("../pages/EmailNotVerified"));
 const Events = React.lazy(() => import("../pages/Events"));
 const Users = React.lazy(() => import("../pages/Users"));
-const RegistrationPage = React.lazy(() => import("../views/auth/RegistrationPage"));
+const RegistrationPage = React.lazy(() => import("../pages/RegistrationPage"));
 const Dashboard = React.lazy(() => import("../pages/Dashboard"));
 
 export default function Router() {

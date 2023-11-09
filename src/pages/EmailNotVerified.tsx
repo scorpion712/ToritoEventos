@@ -1,7 +1,7 @@
 import { Avatar, Box, Container, CssBaseline, Link, Paper, Typography } from "@mui/material"; 
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import React from "react"; 
-import Copyright from "../../components/Copyright";
+import Copyright from "../components/Copyright";
 
 function EmailNotVerified() {
     return (

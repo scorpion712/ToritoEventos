@@ -14,12 +14,12 @@ import { FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Pap
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
  
-import { validEmail, isPasswordValid } from '../../utilities/Validators';
+import { validEmail, isPasswordValid } from '../utilities/Validators';
 import { UserCredential } from 'firebase/auth'; 
-import { PublicRoutes } from '../../models';
-import { CustomInput } from '../../components';
-import { createUser } from '../../services/auth/signIn.service';
-import Copyright from '../../components/Copyright';
+import { PublicRoutes } from '../models';
+import { CustomInput } from '../components';
+import { createUser } from '../services/auth/signIn.service';
+import Copyright from '../components/Copyright';
 
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
