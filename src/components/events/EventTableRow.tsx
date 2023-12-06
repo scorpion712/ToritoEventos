@@ -63,7 +63,7 @@ export const EventTableRow = (props: EventTableRowProps) => {
           aria-label="show-detail"
           style={{ color: "#2f2628" }} //or 461e92
           size="medium"
-          onClick={() => alert('Ver en detalle ' + event.id)}
+          onClick={() => alert('Proximamente ver en detalle ')}
         >
           <PreviewIcon />
         </IconButton>
