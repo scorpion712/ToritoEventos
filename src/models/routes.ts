@@ -8,5 +8,5 @@ export const PrivateRoutes = {
     'DASHBOARD': 'dashboard',
     'REGISTRATION': 'registration',
     'EVENTS': 'events',
-    'USERS': 'users'
+    'USERS': 'users',
 }

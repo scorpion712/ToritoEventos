@@ -10,7 +10,8 @@ import { AuthGuard, RoleGuard, UserGuard } from "../guards";
 import store from "../redux/store";
 import LoadingProgress from "../components/LoadingProgress";
 import { RoutesWithNotFound } from "../utilities";
-import { Roles } from "../models/roles"; 
+import { Roles } from "../models/roles";  
+import { UserDetail } from "../pages";
 
 const Login = React.lazy(() => import("../pages/LoginPage"));
 const SignUpPage = React.lazy(() => import("../pages/SignUpPage"));
@@ -19,6 +20,7 @@ const Events = React.lazy(() => import("../pages/Events"));
 const Users = React.lazy(() => import("../pages/Users"));
 const RegistrationPage = React.lazy(() => import("../pages/RegistrationPage"));
 const Dashboard = React.lazy(() => import("../pages/Dashboard"));
+// const UserDetail = React.lazy(() => import("../pages/UserDetail"));
 
 export default function Router() {
   return (
@@ -29,7 +31,8 @@ export default function Router() {
             <RoutesWithNotFound>
               <Route element={<AuthGuard />}>
                 <Route element={<RoleGuard rol={Roles.ADMIN} />}>
-                  <Route path={PrivateRoutes.USERS} element={<Users />} />
+                  <Route path={PrivateRoutes.USERS} element={<Users />}/>
+                  <Route path={`${PrivateRoutes.USERS}/:id`} element={<UserDetail />} />
                   <Route path={PrivateRoutes.EVENTS} element={<Events />} />
                   <Route path='/' element={<Dashboard />} />
                 </Route>

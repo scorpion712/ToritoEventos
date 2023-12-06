@@ -21,8 +21,6 @@ export const getUsers = async () => {
 export const getUserById = async (providerId: string) => {
     const docRef = doc(db, "users", providerId);
     const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-        console.log("Return user data", docSnap);
-        return docSnap.data();
-    }
+    
+    return adaptFirebaseUserToUserModel(docSnap)
 }

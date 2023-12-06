@@ -9,4 +9,5 @@ export interface AppointmentOwner {
     city: string;
     state: string;
     password?: string;
+    img?: string;
 }

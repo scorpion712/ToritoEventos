@@ -5,8 +5,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { PublicRoutes } from "../models";
 
 export const AuthGuard = () => {
-    const userState = useSelector((store: AppStore) => store.user);
-    console.log(userState.id)
+    const userState = useSelector((store: AppStore) => store.user); 
     return userState.id && userState.isVerified ? <Outlet/> : <Navigate replace to={PublicRoutes.LOGIN}/>;
 }
 
