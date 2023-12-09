@@ -1,6 +1,7 @@
 import { IconButton, TableCell, TableRow } from "@mui/material";
 import PreviewIcon from '@mui/icons-material/Preview';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import { useNavigate } from "react-router-dom";
 
 import { EventModel } from "../../models/EventModel";
 import { eventTypeReverseMap } from "../../models/EventType";
@@ -10,7 +11,12 @@ interface EventTableRowProps {
 }
 
 export const EventTableRow = (props: EventTableRowProps) => {
+  const navigate = useNavigate();
   const { event } = props;
+
+  const handleDetailClick = (eventId: string) => {
+    navigate(`${eventId}`);
+  }
 
   return (
     <TableRow hover key={event.id}>
@@ -44,7 +50,7 @@ export const EventTableRow = (props: EventTableRowProps) => {
         align="center"
         style={{ fontSize: "1.3rem" }}
       >
-        {event.owners.map(o => (`${o.name} ${o.surname}`))}
+        {event.owners.map(o => (`${o.name} ${o.surname}`)).join(', ')}
       </TableCell>
       <TableCell
         component="th"
@@ -63,7 +69,7 @@ export const EventTableRow = (props: EventTableRowProps) => {
           aria-label="show-detail"
           style={{ color: "#2f2628" }} //or 461e92
           size="medium"
-          onClick={() => alert('Proximamente ver en detalle ')}
+          onClick={() => handleDetailClick(event.id)}
         >
           <PreviewIcon />
         </IconButton>

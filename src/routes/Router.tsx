@@ -12,6 +12,7 @@ import LoadingProgress from "../components/LoadingProgress";
 import { RoutesWithNotFound } from "../utilities";
 import { Roles } from "../models/roles";  
 import { UserDetail } from "../pages";
+import EventDetails from "../components/events/EventDetails";
 
 const Login = React.lazy(() => import("../pages/LoginPage"));
 const SignUpPage = React.lazy(() => import("../pages/SignUpPage"));
@@ -34,6 +35,7 @@ export default function Router() {
                   <Route path={PrivateRoutes.USERS} element={<Users />}/>
                   <Route path={`${PrivateRoutes.USERS}/:id`} element={<UserDetail />} />
                   <Route path={PrivateRoutes.EVENTS} element={<Events />} />
+                  <Route path={`${PrivateRoutes.EVENTS}/:id`} element={<EventDetails />} />
                   <Route path='/' element={<Dashboard />} />
                 </Route>
                 <Route path={PrivateRoutes.REGISTRATION} element={<RegistrationPage />} />
