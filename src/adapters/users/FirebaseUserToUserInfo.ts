@@ -4,7 +4,7 @@ import { UserInfo } from "../../models";
 import { Roles } from "../../models/roles";
 import { adminEmails } from "../../adminEmails";
 
-export const adaptFirebaseUserCredentialToUserInfo = (user: User) => {
+export const adaptFirebaseUserCredentialToUserInfo = (user: User) => { 
     return {
         id: user.uid,
         email: user.email,
