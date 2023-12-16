@@ -56,7 +56,7 @@ const Appointment = ({
 export const EventCalendar = () => {
     const userState = useSelector((store: AppStore) => store.user);
     
-    React.useEffect(() => {
+    React.useEffect(() => { 
         if (userState.rol === Roles.ADMIN) {
             const fetchData = async () => {
                 const data = await getEvents();
@@ -64,7 +64,7 @@ export const EventCalendar = () => {
             };
 
             fetchData();
-        }
+        } 
     }, [])
 
 
@@ -154,7 +154,6 @@ export const EventCalendar = () => {
     const onCommitChanges = React.useCallback(({ added, changed, deleted }: any) => {
         if (added) { 
             added.title = `${eventTypeReverseMap[added.eventType]} ${added.guests} invitados`;
-
             if (isFormValid(added)) {
                 const startingAddedId = data.length > 0 ? data[data.length - 1].id + 1 : 0;
                 addEvent(added);
@@ -190,12 +189,13 @@ export const EventCalendar = () => {
         setIsAppointmentBeingCreated(true);
     }, [addedAppointment]);
 
-    const CommandButton = React.useCallback(({ id, ...restProps }: AppointmentForm.CommandButtonProps) => {
-        if (id === 'deleteButton') {
-            return <CommandButton id={id} {...restProps} />;
-        }
-        return <CommandButton id={id} {...restProps} />;
-    }, [allowDeleting]);
+    
+  const CommandButton = React.useCallback(({ id, ...restProps }) => {
+    if (id === 'deleteButton') {
+      return <AppointmentForm.CommandButton id={id} {...restProps} disabled={!allowDeleting} />;
+    }
+    return <AppointmentForm.CommandButton id={id} {...restProps} />;
+  }, [allowDeleting]);
 
     const allowDrag = React.useCallback(
         () => allowDragging && allowUpdating,

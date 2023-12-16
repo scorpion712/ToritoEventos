@@ -230,7 +230,9 @@ export const BasicLayout = ({ onFieldChange, appointmentData }: AppointmentForm.
                                             disableClearable
                                             onInputChange={(_e, newValue) => onOwnerEmailChange(owner, newValue)}
                                             value={owner.email}
-                                            options={registeredUsers.map((user) => user.email)}
+                                            options={registeredUsers.map((user) => user.email).filter((value, index, self) => {
+                                                return self.indexOf(value) === index;
+                                            })}
                                             renderInput={(params) => (
                                                 <TextField
                                                     {...params}
