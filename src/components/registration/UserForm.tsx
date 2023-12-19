@@ -1,10 +1,8 @@
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import { DatePicker } from '@mui/x-date-pickers';
-import { AppointmentOwner } from '../../models/AppointmentModel';
-import { isOver18 } from '../../utilities';
+import TextField from '@mui/material/TextField'; 
+import { AppointmentOwner } from '../../models/AppointmentModel'; 
  
 interface UserFormProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | Date) => void,
@@ -105,19 +103,7 @@ export default function UserForm(props: UserFormProps) {
           />
         </Grid>
         <Grid item xs={12} md={6}>
-          <DatePicker
-            label="Nacimiento"
-            value={user.bornDate} 
-            slotProps={{
-              textField: {
-                helperText: 
-                  <Typography variant='caption' color='error'>
-                    {hasErrors && !isOver18(user.bornDate as Date) ? "Debe ser mayor a 18" : ""}
-                  </Typography>,
-              },
-            }}
-            onChange={(e) => onChange(new Date(e as Date))}
-            format="DD/MM/YYYY" />
+          
         </Grid>
       </Grid>
     </React.Fragment>

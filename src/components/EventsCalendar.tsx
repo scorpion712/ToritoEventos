@@ -190,11 +190,11 @@ export const EventCalendar = () => {
     }, [addedAppointment]);
 
     
-  const CommandButton = React.useCallback(({ id, ...restProps }) => {
+  const CommandButton = React.useCallback(({ id, ...restProps } : any) => {
     if (id === 'deleteButton') {
-      return <AppointmentForm.CommandButton id={id} {...restProps} disabled={!allowDeleting} />;
+      return <CommandButton id={id} {...restProps} disabled={!allowDeleting} />;
     }
-    return <AppointmentForm.CommandButton id={id} {...restProps} />;
+    return <CommandButton id={id} {...restProps} />;
   }, [allowDeleting]);
 
     const allowDrag = React.useCallback(
