@@ -13,6 +13,7 @@ import { RoutesWithNotFound } from "../utilities";
 import { Roles } from "../models/roles";  
 import { UserDetail } from "../pages";
 import EventDetails from "../components/events/EventDetails";
+import Ticket from "../pages/Ticket";
 
 const Login = React.lazy(() => import("../pages/LoginPage"));
 const SignUpPage = React.lazy(() => import("../pages/SignUpPage"));
@@ -40,7 +41,8 @@ export default function Router() {
                 </Route>
                 <Route path={PrivateRoutes.REGISTRATION} element={<RegistrationPage />} />
                 <Route element={<UserGuard/>}>
-                  <Route path='/' element={<Dashboard />} />
+                  <Route path='/main' element={<Dashboard />} />
+                  <Route path={`ticket/:id`} element={<Ticket />} />
                 </Route> 
               </Route>
               <Route path={PublicRoutes.LOGIN} element={<Login />} />
