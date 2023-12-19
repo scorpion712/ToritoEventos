@@ -188,14 +188,7 @@ export const EventCalendar = () => {
         setAddedAppointment(appointment);
         setIsAppointmentBeingCreated(true);
     }, [addedAppointment]);
-
-    
-  const CommandButton = React.useCallback(({ id, ...restProps } : any) => {
-    if (id === 'deleteButton') {
-      return <CommandButton id={id} {...restProps} disabled={!allowDeleting} />;
-    }
-    return <CommandButton id={id} {...restProps} />;
-  }, [allowDeleting]);
+ 
 
     const allowDrag = React.useCallback(
         () => allowDragging && allowUpdating,
@@ -231,7 +224,7 @@ export const EventCalendar = () => {
                         showDeleteButton={allowDeleting}
                     />
                     <AppointmentForm
-                        commandButtonComponent={CommandButton}
+                        
                         readOnly={isAppointmentBeingCreated ? false : !allowUpdating}
                         basicLayoutComponent={BasicLayout}
                     />

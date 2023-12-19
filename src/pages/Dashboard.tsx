@@ -1,5 +1,5 @@
 import Typography from '@mui/material/Typography';
-import { Layout } from '../components/layouts';
+import { Layout } from '../components/layouts'; 
 import { EventCalendar } from '../components/EventsCalendar';
 
 export default function Dashboard() {
