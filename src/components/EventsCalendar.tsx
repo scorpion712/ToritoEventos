@@ -55,7 +55,10 @@ const Appointment = ({
 
 export const EventCalendar = () => {
     const userState = useSelector((store: AppStore) => store.user);
-    
+    const [showSnackBar, setShowSnackBar] = React.useState(false);
+    const [errorMessage, setErrorMessage] = React.useState("");
+    const [data, setData] = React.useState<EventModel[]>([]); 
+
     React.useEffect(() => { 
         if (userState.rol === Roles.ADMIN) {
             const fetchData = async () => {
@@ -64,14 +67,9 @@ export const EventCalendar = () => {
             };
 
             fetchData();
-        } 
-    }, [])
-
-
-    const [showSnackBar, setShowSnackBar] = React.useState(false);
-    const [errorMessage, setErrorMessage] = React.useState("");
-    const [data, setData] = React.useState<EventModel[]>([]); 
-
+        }
+    }, [data])
+    
     const isFormValid = (data: EventModel) => {
         if (!data.owners || data.owners?.length <= 0
             && !data.owners?.some((owner: AppointmentOwner) =>

@@ -11,9 +11,12 @@ import { db, storage } from "..";
 export const addEvent = async (event: EventModel) => {
     const eventId = event.id ? event.id : generateFirestoreId(); 
     try {  
+        let endDate = new Date(event.endDate);
+        endDate.setMinutes(endDate.getMinutes() + 3);
         const firebaseEvent = {
+            allDay: true,
             eventType: event.eventType,
-            endDate: Timestamp.fromDate(event.endDate),
+            endDate: Timestamp.fromDate(endDate),
             startDate: Timestamp.fromDate(event.startDate),
             guests: event.guests,
             title: event.title,
