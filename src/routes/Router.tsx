@@ -14,6 +14,7 @@ import { Roles } from "../models/roles";
 import { UserDetail } from "../pages";
 import EventDetails from "../components/events/EventDetails";
 import Ticket from "../pages/Ticket";
+import LinkTree from "../pages/LinkTree";
 
 const Login = React.lazy(() => import("../pages/LoginPage"));
 const SignUpPage = React.lazy(() => import("../pages/SignUpPage"));
@@ -48,6 +49,7 @@ export default function Router() {
               <Route path={PublicRoutes.LOGIN} element={<Login />} />
               <Route path={PublicRoutes.SIGN_UP} element={<SignUpPage />} />
               <Route path={PublicRoutes.NOT_VERIFIED_EMAIL} element={<EmailNotVerified />} />
+              <Route path={PublicRoutes.LINK_TREE}  element={<LinkTree />} />
             </RoutesWithNotFound>
           </BrowserRouter>
         </Provider>
