@@ -31,6 +31,10 @@
       {
         "src": "/main",
         "dest": "/index.html"
+      },
+      {
+        "src": "/tree",
+        "dest": "/index.html"
       }
     ]
   }
